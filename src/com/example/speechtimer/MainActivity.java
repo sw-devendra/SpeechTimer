@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -44,6 +45,18 @@ public class MainActivity extends Activity {
         	MainActivity.this.startActivity(myIntent);
         break;
     	}              
+    }
+    
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+            	Intent myIntent = new Intent(MainActivity.this, SettingsActivity.class);
+            	MainActivity.this.startActivity(myIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
     
 }

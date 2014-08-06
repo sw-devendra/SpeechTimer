@@ -14,5 +14,9 @@
     <string name="restart">Restart</string>
     <string name="stop">Stop</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="minimum_time">Minimum Time</string>
+    <string name="speech_min_time">Speech Minimum Time</string>
+    <string name="tt_min_time">Table topic minimum time</string>
+    <string name="eval_min_time">Evaluation Mimimum Time</string>
 
 </resources>

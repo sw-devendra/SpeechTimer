@@ -3,6 +3,7 @@ package com.example.speechtimer;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -65,6 +66,13 @@ public class SettingsActivity extends PreferenceActivity {
 
 		// Add 'general' preferences.
 		addPreferencesFromResource(R.xml.pref_general);
+		
+		Resources res = getResources();
+		
+		
+		bindPreferenceSummaryToValue(findPreference(res.getString(R.string.speech_min_time)));
+		bindPreferenceSummaryToValue(findPreference(res.getString(R.string.tt_min_time)));
+		bindPreferenceSummaryToValue(findPreference(res.getString(R.string.eval_min_time)));
 
 	}
 
@@ -142,7 +150,7 @@ public class SettingsActivity extends PreferenceActivity {
 			} else {
 				// For all other preferences, set the summary to the value's
 				// simple string representation.
-				preference.setSummary(stringValue);
+				preference.setSummary(stringValue + " seconds");
 			}
 			return true;
 		}

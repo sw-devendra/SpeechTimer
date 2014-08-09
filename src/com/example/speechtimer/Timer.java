@@ -8,11 +8,14 @@ import com.example.speechtimer.util.SystemUiHider;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Chronometer;
@@ -128,13 +131,43 @@ public class Timer extends Activity {
 			 
 			@Override
 			public void onChronometerTick(Chronometer chronometer) {
+				Bundle extras = getIntent().getExtras();
+				int speech_type=0;
+				int min=0,mid=0,max=0;
+				if (extras != null) {
+					speech_type = extras.getInt("speech_type");
+				}
+				SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+				Resources res = getResources();
+				switch(speech_type)
+				{
+				case R.id.speech:
+					min = Integer.valueOf((sharedPref.getString(res.getString(R.string.speech_min_time),"0")));
+					mid = min + 60;
+					max = mid + 60;
+					break;
+					
+				case R.id.table_topic:
+					min = Integer.valueOf((sharedPref.getString(res.getString(R.string.tt_min_time),"0")));
+					mid = min + 30;
+					max = mid + 30;
+					break;
+					
+				case R.id.evaluation:
+					min = Integer.valueOf((sharedPref.getString(res.getString(R.string.eval_min_time),"0")));
+					mid = min + 30;
+					max = mid + 30;
+					break;
+										
+				}
+				
 				 long timepassed = SystemClock.elapsedRealtime() - chronometer.getBase();
 				 View v = findViewById(R.id.timer_layout);
-				 if (timepassed >= 120000)
+				 if (timepassed >= max*1000)
 					 v.setBackgroundColor(Color.RED);
-				 else if (timepassed >= 90000)
+				 else if (timepassed >= mid*1000)
 					 v.setBackgroundColor(Color.YELLOW);
-				 else if (timepassed >= 60000)
+				 else if (timepassed >= min*1000)
 					 v.setBackgroundColor(Color.GREEN);
 				 else
 					 v.setBackgroundColor(Color.WHITE);

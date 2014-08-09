@@ -32,16 +32,11 @@ public class MainActivity extends Activity {
     public void buttonOnClick(View v) {
     	switch(v.getId()) {
         case R.id.speech:
-            //Inform the user the button1 has been clicked
-               
-
         case R.id.table_topic:
-            //Inform the user the button2 has been clicked
-              
-
         case R.id.evaluation:
             //Inform the user the button2 has been clicked
         	Intent myIntent = new Intent(MainActivity.this, Timer.class);
+        	myIntent.putExtra("speech_type", v.getId());
         	MainActivity.this.startActivity(myIntent);
         break;
     	}              

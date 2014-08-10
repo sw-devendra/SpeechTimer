@@ -9,6 +9,7 @@
     tools:context=".MainActivity" >
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -24,9 +25,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:onClick="buttonOnClick"
         android:text="@string/speech"
-        android:textAlignment="center" 
-        android:onClick="buttonOnClick" />
+        android:textAlignment="center" />
 
     <Button
         android:id="@+id/table_topic"
@@ -35,8 +36,8 @@
         android:layout_alignLeft="@+id/speech"
         android:layout_alignRight="@+id/speech"
         android:layout_below="@+id/speech"
-        android:text="@string/table" 
-        android:onClick="buttonOnClick" />
+        android:onClick="buttonOnClick"
+        android:text="@string/table" />
 
     <Button
         android:id="@+id/evaluation"
@@ -45,7 +46,31 @@
         android:layout_alignLeft="@+id/table_topic"
         android:layout_alignRight="@+id/table_topic"
         android:layout_below="@+id/table_topic"
-        android:text="@string/evaluation" 
-        android:onClick="buttonOnClick" />
+        android:onClick="buttonOnClick"
+        android:text="@string/evaluation" />
+
+    <Button
+        android:id="@+id/report"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="14dp"
+        android:onClick="buttonOnClick"
+        android:text="@string/report" />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
+        android:ems="10"
+        android:hint="@string/next_presenter"
+        android:inputType="textPersonName" >
+
+        <requestFocus />
+    </EditText>
 
 </RelativeLayout>

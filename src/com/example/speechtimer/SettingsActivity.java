@@ -20,9 +20,9 @@ import android.text.TextUtils;
 
 import java.util.List;
 
-import com.example.listtest.R;
-import com.example.listtest.R.string;
-import com.example.listtest.R.xml;
+import com.example.speechtimer.R;
+import com.example.speechtimer.R.string;
+import com.example.speechtimer.R.xml;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On

@@ -1,9 +1,9 @@
 package com.example.speechtimer;
 
-import com.example.listtest.R;
-import com.example.listtest.R.id;
-import com.example.listtest.R.layout;
-import com.example.listtest.R.menu;
+import com.example.speechtimer.R;
+import com.example.speechtimer.R.id;
+import com.example.speechtimer.R.layout;
+import com.example.speechtimer.R.menu;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends Activity {
 
@@ -35,10 +36,17 @@ public class MainActivity extends Activity {
         case R.id.table_topic:
         case R.id.evaluation:
             //Inform the user the button2 has been clicked
+        	EditText nameField = (EditText) findViewById(R.id.editText1);
         	Intent myIntent = new Intent(MainActivity.this, Timer.class);
         	myIntent.putExtra("speech_type", v.getId());
+        	myIntent.putExtra("name", nameField.getText().toString().replace(',', ' '));
         	MainActivity.this.startActivity(myIntent);
         break;
+        
+        case R.id.report:
+        	Intent myIntent2 = new Intent(MainActivity.this, ReportActivity.class);
+        	MainActivity.this.startActivity(myIntent2);
+        break;        	
     	}              
     }
     

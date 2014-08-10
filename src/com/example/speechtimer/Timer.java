@@ -1,8 +1,14 @@
 package com.example.speechtimer;
 
-import com.example.listtest.R;
-import com.example.listtest.R.id;
-import com.example.listtest.R.layout;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.Date;
+
+import com.example.speechtimer.R;
+import com.example.speechtimer.R.id;
+import com.example.speechtimer.R.layout;
+import com.example.speechtimer.util.SpeakerEntry;
 import com.example.speechtimer.util.SystemUiHider;
 
 import android.annotation.TargetApi;
@@ -20,6 +26,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.Chronometer.OnChronometerTickListener;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 /**
@@ -175,6 +182,7 @@ public class Timer extends Activity {
  
 		});
 		
+		
 		// Upon interacting with UI controls, delay any scheduled hide()
 		// operations to prevent the jarring behavior of controls going away
 		// while interacting with the UI.
@@ -191,6 +199,17 @@ public class Timer extends Activity {
 		
 	}
 
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		ToggleButton tb = (ToggleButton) findViewById(R.id.toggleButton1);
+		if (tb.isChecked())
+		{
+			writeReportToFile();
+		}
+	}
+	
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
@@ -241,6 +260,49 @@ public class Timer extends Activity {
     	    	contentView.start();
     	    } else {
     	    	contentView.stop();
+    	    	writeReportToFile();
     	    }
+    }
+    
+    private void writeReportToFile()
+    {
+    	File file = new File(this.getFilesDir(), SpeakerEntry.REPORT_FILE);
+    	
+    	long l = file.lastModified();
+    	Date now = new Date();
+    	
+    	try 
+    	{
+            FileWriter fw = new FileWriter(file, 
+            		file.exists() && (now.getTime() - l < SpeakerEntry.MAX_MEET_DURATION)) ;
+            PrintWriter pw = new PrintWriter(fw);
+            
+            SpeakerEntry se = new SpeakerEntry();
+            se.name = getIntent().getExtras().getString("name");
+            switch(getIntent().getExtras().getInt("speech_type"))
+            {
+            case R.id.speech:
+            	se.type = new String("Speaker");
+            	break;
+            case R.id.table_topic:
+            	se.type = new String("Table Topic");
+            	break;
+            case R.id.evaluation:
+            	se.type = new String("Evaluator");
+            	break;
+            
+            }
+
+            Chronometer contentView = (Chronometer)findViewById(R.id.fullscreen_content);
+            se.duration = contentView.getText().toString();
+            
+            pw.println(se.toFileLine()); 	
+            pw.close();
+            fw.close();
+    	}
+    	catch(Exception e)
+    	{
+    		// Ignore if file could not be write
+    	}	
     }
 }

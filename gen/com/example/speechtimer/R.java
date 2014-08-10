@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.example.listtest;
+package com.example.speechtimer;
 
 public final class R {
     public static final class array {
@@ -45,21 +45,28 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f0b0007;
-        public static final int evaluation=0x7f0b0002;
-        public static final int fullscreen_content=0x7f0b0004;
-        public static final int fullscreen_content_controls=0x7f0b0005;
-        public static final int speech=0x7f0b0000;
-        public static final int table_topic=0x7f0b0001;
-        public static final int timer_layout=0x7f0b0003;
-        public static final int toggleButton1=0x7f0b0006;
+        public static final int action_settings=0x7f0b000b;
+        public static final int editText1=0x7f0b0005;
+        public static final int evaluation=0x7f0b0003;
+        public static final int fullscreen_content=0x7f0b0008;
+        public static final int fullscreen_content_controls=0x7f0b0009;
+        public static final int linearLayout1=0x7f0b0000;
+        public static final int listView1=0x7f0b0006;
+        public static final int report=0x7f0b0004;
+        public static final int speech=0x7f0b0001;
+        public static final int table_topic=0x7f0b0002;
+        public static final int timer_layout=0x7f0b0007;
+        public static final int toggleButton1=0x7f0b000a;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
-        public static final int activity_timer=0x7f030001;
+        public static final int activity_report=0x7f030001;
+        public static final int activity_timer=0x7f030002;
+        public static final int report_entry=0x7f030003;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
+        public static final int report=0x7f0a0001;
     }
     public static final class string {
         public static final int action_settings=0x7f070001;
@@ -70,34 +77,37 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int evaluation=0x7f070004;
         public static final int hello_world=0x7f070002;
         public static final int minimum_time=0x7f07000d;
+        public static final int next_presenter=0x7f070013;
         public static final int play=0x7f070009;
-        public static final int pref_default_display_name=0x7f070016;
-        public static final int pref_description_social_recommendations=0x7f070014;
+        public static final int pref_default_display_name=0x7f070019;
+        public static final int pref_description_social_recommendations=0x7f070017;
         /**  Example settings for Data & Sync 
          */
-        public static final int pref_header_data_sync=0x7f070018;
+        public static final int pref_header_data_sync=0x7f07001b;
         /**  Strings related to Settings 
  Example General settings 
          */
-        public static final int pref_header_general=0x7f070012;
+        public static final int pref_header_general=0x7f070015;
         /**  Example settings for Notifications 
          */
-        public static final int pref_header_notifications=0x7f07001b;
-        public static final int pref_ringtone_silent=0x7f07001e;
-        public static final int pref_title_add_friends_to_messages=0x7f070017;
-        public static final int pref_title_display_name=0x7f070015;
-        public static final int pref_title_new_message_notifications=0x7f07001c;
-        public static final int pref_title_ringtone=0x7f07001d;
-        public static final int pref_title_social_recommendations=0x7f070013;
-        public static final int pref_title_sync_frequency=0x7f070019;
-        public static final int pref_title_system_sync_settings=0x7f07001a;
-        public static final int pref_title_vibrate=0x7f07001f;
+        public static final int pref_header_notifications=0x7f07001e;
+        public static final int pref_ringtone_silent=0x7f070021;
+        public static final int pref_title_add_friends_to_messages=0x7f07001a;
+        public static final int pref_title_display_name=0x7f070018;
+        public static final int pref_title_new_message_notifications=0x7f07001f;
+        public static final int pref_title_ringtone=0x7f070020;
+        public static final int pref_title_social_recommendations=0x7f070016;
+        public static final int pref_title_sync_frequency=0x7f07001c;
+        public static final int pref_title_system_sync_settings=0x7f07001d;
+        public static final int pref_title_vibrate=0x7f070022;
+        public static final int report=0x7f070012;
         public static final int restart=0x7f07000a;
         public static final int speech=0x7f070003;
         public static final int speech_min_time=0x7f07000e;
         public static final int stop=0x7f07000b;
         public static final int table=0x7f070005;
-        public static final int title_activity_settings=0x7f070011;
+        public static final int title_activity_report=0x7f070011;
+        public static final int title_activity_settings=0x7f070014;
         public static final int title_activity_test=0x7f07000c;
         public static final int title_activity_timer=0x7f070006;
         public static final int tt_min_time=0x7f07000f;
@@ -152,8 +162,8 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #ButtonBarContainerTheme_buttonBarButtonStyle com.example.listtest:buttonBarButtonStyle}</code></td><td></td></tr>
-           <tr><td><code>{@link #ButtonBarContainerTheme_buttonBarStyle com.example.listtest:buttonBarStyle}</code></td><td></td></tr>
+           <tr><td><code>{@link #ButtonBarContainerTheme_buttonBarButtonStyle com.example.speechtimer:buttonBarButtonStyle}</code></td><td></td></tr>
+           <tr><td><code>{@link #ButtonBarContainerTheme_buttonBarStyle com.example.speechtimer:buttonBarStyle}</code></td><td></td></tr>
            </table>
            @see #ButtonBarContainerTheme_buttonBarButtonStyle
            @see #ButtonBarContainerTheme_buttonBarStyle
@@ -162,23 +172,23 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
             0x7f010000, 0x7f010001
         };
         /**
-          <p>This symbol is the offset where the {@link com.example.listtest.R.attr#buttonBarButtonStyle}
+          <p>This symbol is the offset where the {@link com.example.speechtimer.R.attr#buttonBarButtonStyle}
           attribute's value can be found in the {@link #ButtonBarContainerTheme} array.
 
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name com.example.listtest:buttonBarButtonStyle
+          @attr name com.example.speechtimer:buttonBarButtonStyle
         */
         public static final int ButtonBarContainerTheme_buttonBarButtonStyle = 1;
         /**
-          <p>This symbol is the offset where the {@link com.example.listtest.R.attr#buttonBarStyle}
+          <p>This symbol is the offset where the {@link com.example.speechtimer.R.attr#buttonBarStyle}
           attribute's value can be found in the {@link #ButtonBarContainerTheme} array.
 
 
           <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
-          @attr name com.example.listtest:buttonBarStyle
+          @attr name com.example.speechtimer:buttonBarStyle
         */
         public static final int ButtonBarContainerTheme_buttonBarStyle = 0;
     };

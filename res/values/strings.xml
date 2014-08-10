@@ -18,5 +18,8 @@
     <string name="speech_min_time">Speech Minimum Time</string>
     <string name="tt_min_time">Table topic minimum time</string>
     <string name="eval_min_time">Evaluation Mimimum Time</string>
+    <string name="title_activity_report">ReportActivity</string>
+    <string name="report">Report</string>
+    <string name="next_presenter">Who is going to speak?</string>
 
 </resources>

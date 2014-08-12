@@ -22,6 +22,12 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
     }
 
+    @Override
+    protected void onStart() {
+    	super.onStart();
+    	EditText nameText = (EditText) findViewById(R.id.editText1);
+    	nameText.setText("");
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

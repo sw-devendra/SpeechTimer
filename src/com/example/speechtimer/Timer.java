@@ -6,14 +6,11 @@ import java.io.PrintWriter;
 import java.util.Date;
 
 import com.example.speechtimer.R;
-import com.example.speechtimer.R.id;
-import com.example.speechtimer.R.layout;
 import com.example.speechtimer.util.SpeakerEntry;
 import com.example.speechtimer.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -26,7 +23,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.Chronometer.OnChronometerTickListener;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 /**
@@ -207,6 +203,9 @@ public class Timer extends Activity {
 		if (tb.isChecked())
 		{
 			writeReportToFile();
+			tb.setChecked(false);
+			Chronometer ch = (Chronometer) findViewById(R.id.fullscreen_content);
+			ch.stop();
 		}
 	}
 	

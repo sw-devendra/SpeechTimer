@@ -1,7 +1,7 @@
 SpeechTimer
 ===========
 
-This a simple android application which could be useful in Toastmaster meetings to perform Timer's role.
+This is a simple android application which could be useful in Toastmaster meetings to perform Timer's role.
 When started, the application shows menu to select one of different types of activities of toastmaster meeting.
 
 Main Screen

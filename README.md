@@ -30,7 +30,7 @@ Three stages of an activity
 
 Download
 --------
-Please feel free to [download this application](https://github.com/devendra020280/SpeechTimer/blob/master/bin/SpeechTimer.apk), use it in your meetings give me your feedback.
+Please feel free to [download this application](https://github.com/devendra020280/SpeechTimer/raw/master/bin/SpeechTimer.apk), use it in your meetings give me your feedback.
 
 This is my first android app :-)
 

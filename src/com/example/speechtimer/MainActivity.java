@@ -6,6 +6,7 @@ import com.example.speechtimer.R.layout;
 import com.example.speechtimer.R.menu;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
@@ -19,6 +20,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
         setContentView(R.layout.activity_main);
     }
 

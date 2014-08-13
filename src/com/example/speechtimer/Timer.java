@@ -21,6 +21,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Chronometer;
 import android.widget.Chronometer.OnChronometerTickListener;
 import android.widget.ToggleButton;
@@ -63,7 +64,8 @@ public class Timer extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_timer);
 
 		final View controlsView = findViewById(R.id.fullscreen_content_controls);
@@ -188,17 +190,11 @@ public class Timer extends Activity {
 		
 		toggle.toggle();
 		contentView.start();
-		
-		
-		// Action bar hiding
-		getActionBar().hide();
-		
 	}
 
 	@Override
-	protected void onStop()
+	public void onBackPressed()
 	{
-		super.onStop();
 		ToggleButton tb = (ToggleButton) findViewById(R.id.toggleButton1);
 		if (tb.isChecked())
 		{
@@ -207,6 +203,8 @@ public class Timer extends Activity {
 			Chronometer ch = (Chronometer) findViewById(R.id.fullscreen_content);
 			ch.stop();
 		}
+		
+		super.onBackPressed();
 	}
 	
 	@Override

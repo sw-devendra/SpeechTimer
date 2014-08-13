@@ -73,6 +73,7 @@ public class SettingsActivity extends PreferenceActivity {
 		bindPreferenceSummaryToValue(findPreference(res.getString(R.string.speech_min_time)));
 		bindPreferenceSummaryToValue(findPreference(res.getString(R.string.tt_min_time)));
 		bindPreferenceSummaryToValue(findPreference(res.getString(R.string.eval_min_time)));
+		bindPreferenceSummaryToValue(findPreference(res.getString(R.string.speech_min_max_diff)));
 
 	}
 
@@ -177,27 +178,6 @@ public class SettingsActivity extends PreferenceActivity {
 				PreferenceManager.getDefaultSharedPreferences(
 						preference.getContext()).getString(preference.getKey(),
 						""));
-	}
-
-	/**
-	 * This fragment shows general preferences only. It is used when the
-	 * activity is showing a two-pane settings UI.
-	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	public static class GeneralPreferenceFragment extends PreferenceFragment {
-		@Override
-		public void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
-			addPreferencesFromResource(R.xml.pref_general);
-
-			// Bind the summaries of EditText/List/Dialog/Ringtone preferences
-			// to their values. When their values change, their summaries are
-			// updated to reflect the new value, per the Android Design
-			// guidelines.
-			bindPreferenceSummaryToValue(findPreference("speech_min_time"));
-			bindPreferenceSummaryToValue(findPreference("tt_min_time"));
-			bindPreferenceSummaryToValue(findPreference("eval_min_time"));
-		}
 	}
 
 }

@@ -11,10 +11,12 @@ import android.content.DialogInterface;
 import android.view.Menu;
 import android.view.View;
 
+import android.widget.Button;
 import android.widget.ListView;
+import android.database.DataSetObserver;
 
 
-public class ReportActivity extends Activity {
+public class ReportActivity extends Activity{
 
 	class TimerEntryDeleteClickListner implements DialogInterface.OnClickListener {
 		private int position = -1;
@@ -41,6 +43,34 @@ public class ReportActivity extends Activity {
 		ReportData rd = new ReportData(this, R.layout.report_entry, R.id.textView1);
 		ListView lv = (ListView) findViewById(R.id.listView1);
 		lv.setAdapter(rd);
+		rd.setNotifyOnChange(true);
+		
+		rd.registerDataSetObserver(new DataSetObserver() {
+			@Override
+			public void onChanged()
+			{
+				ListView lv = (ListView) findViewById(R.id.listView1);
+				Button b = (Button)findViewById(R.id.button1);
+				b.setEnabled(lv.getAdapter().getCount() != 0);
+				if (lv.getAdapter().getCount() == 0)
+					b.setVisibility(View.INVISIBLE);
+				else
+					b.setVisibility(View.VISIBLE);
+			}
+			
+			@Override
+			public void onInvalidated()
+			{
+				
+			}
+			
+		});
+		
+		Button b = (Button)findViewById(R.id.button1);
+		if (lv.getAdapter().getCount() == 0)
+			b.setVisibility(View.INVISIBLE);
+		else
+			b.setVisibility(View.VISIBLE);
 	}
 
 	@Override

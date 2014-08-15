@@ -44,6 +44,7 @@ public class ReportData extends ArrayAdapter<SpeakerEntry>{
         }
 	}
 	
+	
 	public void setChanged()
 	{
 		changed = true;

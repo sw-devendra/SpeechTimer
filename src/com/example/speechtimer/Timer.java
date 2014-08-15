@@ -186,8 +186,7 @@ public class Timer extends Activity {
 		// operations to prevent the jarring behavior of controls going away
 		// while interacting with the UI.
 		ToggleButton toggle = (ToggleButton) findViewById(R.id.toggleButton1);
-		toggle.setOnTouchListener(
-				mDelayHideTouchListener);
+		toggle.setOnTouchListener(mDelayHideTouchListener);
 		
 		toggle.toggle();
 		contentView.start();

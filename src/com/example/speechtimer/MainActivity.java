@@ -1,9 +1,6 @@
 package com.example.speechtimer;
 
 import com.example.speechtimer.R;
-import com.example.speechtimer.R.id;
-import com.example.speechtimer.R.layout;
-import com.example.speechtimer.R.menu;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -12,7 +9,6 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 public class MainActivity extends Activity {

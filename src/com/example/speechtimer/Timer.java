@@ -172,7 +172,7 @@ public class Timer extends Activity {
 				 if (timepassed >= max*1000)
 					 v.setBackgroundColor(Color.RED);
 				 else if (timepassed >= mid*1000)
-					 v.setBackgroundColor(Color.YELLOW);
+					 v.setBackgroundColor(Color.rgb(255, 255, 150));
 				 else if (timepassed >= min*1000)
 					 v.setBackgroundColor(Color.GREEN);
 				 else

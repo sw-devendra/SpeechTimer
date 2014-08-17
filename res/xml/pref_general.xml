@@ -8,9 +8,10 @@
          dismiss it.
     -->
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
-    <EditTextPreference android:key="@string/speech_min_time" android:title="@string/speech_min_time" android:numeric="integer" android:maxLength="3" android:defaultValue="300"/>
-    <EditTextPreference android:key="@string/tt_min_time" android:title="@string/tt_min_time" android:numeric="integer" android:maxLength="3" android:defaultValue="60"/>
-    <EditTextPreference android:key="@string/eval_min_time" android:title="@string/eval_min_time" android:numeric="integer" android:maxLength="3" android:defaultValue="120"/>
-    <EditTextPreference android:defaultValue="120" android:key="@string/speech_min_max_diff" android:title="@string/speech_min_max_diff"/>
+    <ListPreference android:entryValues="@array/pref_speech_time" android:entries="@array/pref_speech_time_titles" android:defaultValue="300" android:title="@string/speech_min_time" android:key="@string/speech_min_time" /><ListPreference android:defaultValue="420" android:summary="7 minutes" android:title="@string/speech_max_time" android:key="@string/speech_max_time" android:entryValues="@array/pref_speech_max_time" android:entries="@array/pref_speech_max_time_titles" android:dependency="@string/speech_min_time"/>
+    
+    
+    <ListPreference android:entryValues="@array/pref_short_speech_time" android:defaultValue="60" android:title="@string/tt_min_time" android:key="@string/tt_min_time" android:entries="@array/pref_short_speech_time_titles"/>
+    <ListPreference android:entryValues="@array/pref_short_speech_time" android:defaultValue="120" android:title="@string/eval_min_time" android:key="@string/eval_min_time" android:entries="@array/pref_short_speech_time_titles"/>
 
 </PreferenceScreen>

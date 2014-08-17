@@ -9,10 +9,12 @@ package com.example.speechtimer;
 
 public final class R {
     public static final class array {
-        public static final int pref_example_list_titles=0x7f080000;
-        public static final int pref_example_list_values=0x7f080001;
-        public static final int pref_sync_frequency_titles=0x7f080002;
-        public static final int pref_sync_frequency_values=0x7f080003;
+        public static final int pref_short_speech_time=0x7f080002;
+        public static final int pref_short_speech_time_titles=0x7f080003;
+        public static final int pref_speech_max_time=0x7f080004;
+        public static final int pref_speech_max_time_titles=0x7f080005;
+        public static final int pref_speech_time=0x7f080000;
+        public static final int pref_speech_time_titles=0x7f080001;
     }
     public static final class attr {
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
@@ -82,36 +84,20 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int minimum_time=0x7f07000d;
         public static final int next_presenter=0x7f070013;
         public static final int play=0x7f070009;
-        public static final int pref_default_display_name=0x7f07001a;
-        public static final int pref_description_social_recommendations=0x7f070018;
-        /**  Example settings for Data & Sync 
-         */
-        public static final int pref_header_data_sync=0x7f07001c;
         /**  Strings related to Settings 
  Example General settings 
          */
-        public static final int pref_header_general=0x7f070016;
-        /**  Example settings for Notifications 
-         */
-        public static final int pref_header_notifications=0x7f07001f;
-        public static final int pref_ringtone_silent=0x7f070022;
-        public static final int pref_title_add_friends_to_messages=0x7f07001b;
-        public static final int pref_title_display_name=0x7f070019;
-        public static final int pref_title_new_message_notifications=0x7f070020;
-        public static final int pref_title_ringtone=0x7f070021;
-        public static final int pref_title_social_recommendations=0x7f070017;
-        public static final int pref_title_sync_frequency=0x7f07001d;
-        public static final int pref_title_system_sync_settings=0x7f07001e;
-        public static final int pref_title_vibrate=0x7f070023;
+        public static final int pref_header_general=0x7f070017;
         public static final int report=0x7f070012;
         public static final int restart=0x7f07000a;
         public static final int speech=0x7f070003;
+        public static final int speech_max_time=0x7f070015;
         public static final int speech_min_max_diff=0x7f070014;
         public static final int speech_min_time=0x7f07000e;
         public static final int stop=0x7f07000b;
         public static final int table=0x7f070005;
         public static final int title_activity_report=0x7f070011;
-        public static final int title_activity_settings=0x7f070015;
+        public static final int title_activity_settings=0x7f070016;
         public static final int title_activity_test=0x7f07000c;
         public static final int title_activity_timer=0x7f070006;
         public static final int tt_min_time=0x7f07000f;

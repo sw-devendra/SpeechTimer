@@ -148,9 +148,8 @@ public class Timer extends Activity {
 				{
 				case R.id.speech:
 					min = Integer.valueOf((sharedPref.getString(res.getString(R.string.speech_min_time),"0")));
-					int diff = Integer.valueOf((sharedPref.getString(res.getString(R.string.speech_min_max_diff),"120")))/2;
-					mid = min + diff;
-					max = mid + diff;
+					max = Integer.valueOf((sharedPref.getString(res.getString(R.string.speech_max_time),"120")))/2;
+					mid = (min + max)/2;
 					break;
 					
 				case R.id.table_topic:

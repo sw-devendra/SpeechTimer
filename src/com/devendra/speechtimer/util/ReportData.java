@@ -1,4 +1,4 @@
-package com.example.speechtimer.util;
+package com.devendra.speechtimer.util;
 
 import java.io.File;
 import java.io.FileWriter;

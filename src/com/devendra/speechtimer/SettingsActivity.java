@@ -1,4 +1,4 @@
-package com.example.speechtimer;
+package com.devendra.speechtimer;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
 
-import com.example.speechtimer.R;
+import com.devendra.speechtimer.R;
 
 
 public class SettingsActivity extends PreferenceActivity {

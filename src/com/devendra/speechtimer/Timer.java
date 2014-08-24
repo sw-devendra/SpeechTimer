@@ -1,13 +1,13 @@
-package com.example.speechtimer;
+package com.devendra.speechtimer;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Date;
 
-import com.example.speechtimer.R;
-import com.example.speechtimer.util.SpeakerEntry;
-import com.example.speechtimer.util.SystemUiHider;
+import com.devendra.speechtimer.R;
+import com.devendra.speechtimer.util.SpeakerEntry;
+import com.devendra.speechtimer.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

@@ -1,4 +1,4 @@
-package com.example.speechtimer.util;
+package com.devendra.speechtimer.util;
 
 public class SpeakerEntry
 {

@@ -1,6 +1,6 @@
-package com.example.speechtimer;
+package com.devendra.speechtimer;
 
-import com.example.speechtimer.R;
+import com.devendra.speechtimer.R;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;

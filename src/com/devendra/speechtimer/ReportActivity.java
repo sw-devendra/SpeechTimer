@@ -1,14 +1,16 @@
-package com.example.speechtimer;
+package com.devendra.speechtimer;
 
-import com.example.speechtimer.R;
-import com.example.speechtimer.util.ReportData;
-import com.example.speechtimer.util.SpeakerEntry;
+import com.devendra.speechtimer.R;
+import com.devendra.speechtimer.util.ReportData;
+import com.devendra.speechtimer.util.SpeakerEntry;
 
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.Button;
@@ -123,5 +125,17 @@ public class ReportActivity extends Activity{
             .setNegativeButton("No", null)
             .show();
     	}
+    }
+    
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+            	Intent myIntent = new Intent(ReportActivity.this, SettingsActivity.class);
+            	ReportActivity.this.startActivity(myIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

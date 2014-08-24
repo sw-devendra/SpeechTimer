@@ -1,4 +1,4 @@
-package com.example.speechtimer.util;
+package com.devendra.speechtimer.util;
 
 import android.app.Activity;
 import android.os.Build;

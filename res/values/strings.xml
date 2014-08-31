@@ -4,9 +4,9 @@
     <string name="app_name">SpeechTimer</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="speech">Prepared Speech</string>
-    <string name="evaluation">Evaluation</string>
-    <string name="table">Table topic</string>
+    <string name="speech">Speech</string>
+    <string name="evaluation">Evaluation (2 to 3 min)</string>
+    <string name="table">Table topic (1 to 2 min)</string>
     <string name="title_activity_timer">Timer</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>

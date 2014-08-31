@@ -2,11 +2,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fadingEdgeLength="@dimen/fadingwidth"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:textAlignment="center"
     tools:context=".MainActivity" >
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:hint="@string/next_presenter"
+        android:inputType="textPersonName"  
+        android:selectAllOnFocus="true">
+
+        <requestFocus />
+    </EditText>
 
     <Button
         android:id="@+id/report"
@@ -17,27 +33,12 @@
         android:onClick="buttonOnClick"
         android:text="@string/report" />
 
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:hint="@string/next_presenter"
-        android:inputType="textPersonName" 
-        android:selectAllOnFocus="true" >
-
-        <requestFocus />
-    </EditText>
-
     <Button
         android:id="@+id/evaluation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/report"
-        android:layout_alignRight="@+id/table_topic"
-        android:layout_marginBottom="79dp"
+        android:layout_toRightOf="@+id/report"
         android:onClick="buttonOnClick"
         android:text="@string/evaluation" />
 
@@ -45,29 +46,35 @@
         android:id="@+id/table_topic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/evaluation"
-        android:layout_alignRight="@+id/editText1"
-        android:layout_marginBottom="28dp"
+        android:layout_alignBaseline="@+id/evaluation"
+        android:layout_alignBottom="@+id/evaluation"
+        android:layout_toLeftOf="@+id/report"
         android:onClick="buttonOnClick"
         android:text="@string/table" />
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/table_topic"
-        android:layout_alignLeft="@+id/editText1"
-        android:layout_marginBottom="22dp" >
+        android:layout_below="@+id/editText1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp"
+        android:orientation="horizontal" >
 
         <EditText
             android:id="@+id/editText2"
-            android:layout_width="51dp"
-            android:layout_height="45dp"
+            android:layout_width="46dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="0.13"
             android:background="@drawable/mineditbg"
             android:ems="10"
+            android:fadingEdgeLength="@dimen/fadingwidth"
             android:inputType="number"
             android:maxLength="2"
             android:selectAllOnFocus="true"
             android:text="5"
+            android:textAlignment="center"
             android:textColor="@color/neutral"
             android:textStyle="bold" />
 
@@ -75,26 +82,40 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0"
+            android:layout_weight="0.1"
+            android:gravity="center"
             android:text="to"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:selectAllOnFocus="true" />
 
         <Button
             android:id="@+id/buttonMaxTime"
-            android:layout_width="51dp"
-            android:layout_height="45dp"
+            android:layout_width="46dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="0.13"
             android:background="@drawable/maxeditbg"
             android:text="7"
+            android:textAlignment="center"
             android:textColor="@color/neutral"
             android:textStyle="bold" 
-            android:onClick="maxButtonOnClick" />
+            android:onClick="maxButtonOnClick"/>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.07"
+            android:text="minutes"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/speech"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="19dp"
+            android:layout_weight="1.03"
             android:onClick="buttonOnClick"
             android:text="@string/speech"
             android:textAlignment="center" />

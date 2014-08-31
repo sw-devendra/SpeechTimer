@@ -8,10 +8,7 @@
          dismiss it.
     -->
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
-    <ListPreference android:entryValues="@array/pref_speech_time" android:entries="@array/pref_speech_time_titles" android:defaultValue="300" android:title="@string/speech_min_time" android:key="@string/speech_min_time" /><ListPreference android:defaultValue="420" android:summary="7 minutes" android:title="@string/speech_max_time" android:key="@string/speech_max_time" android:entryValues="@array/pref_speech_max_time" android:entries="@array/pref_speech_max_time_titles" android:dependency="@string/speech_min_time"/>
-    
-    
-    <ListPreference android:entryValues="@array/pref_short_speech_time" android:defaultValue="60" android:title="@string/tt_min_time" android:key="@string/tt_min_time" android:entries="@array/pref_short_speech_time_titles"/>
-    <ListPreference android:entryValues="@array/pref_short_speech_time" android:defaultValue="120" android:title="@string/eval_min_time" android:key="@string/eval_min_time" android:entries="@array/pref_short_speech_time_titles"/>
+    <CheckBoxPreference android:title="Enable Vibration" android:key="vibration" android:enabled="true" android:summaryOff="No vibration on crossing minimum, medium, and maximum time" android:summaryOn="Vibration on crossing minimum, medium, and maximum time" android:defaultValue="true"/>
+    <CheckBoxPreference android:title="Keep screen on" android:key="keepscreenon" android:defaultValue="true" android:summaryOff="Allow screen to turn off even when timer is running" android:summaryOn="Keep screen on when timer is running"/>
 
 </PreferenceScreen>

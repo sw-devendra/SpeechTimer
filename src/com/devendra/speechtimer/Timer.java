@@ -11,8 +11,8 @@ import com.devendra.speechtimer.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,9 +22,11 @@ import android.preference.PreferenceManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Chronometer;
 import android.widget.Chronometer.OnChronometerTickListener;
 import android.widget.ToggleButton;
+import android.os.Vibrator;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -55,15 +57,31 @@ public class Timer extends Activity {
 	 * The flags to pass to {@link SystemUiHider#getInstance}.
 	 */
 	private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
+	public static final int SPEECH_STATE_STARTED=0;
+	public static final int SPEECH_STATE_MIN_TIME_CROSOSED=1;
+	public static final int SPEECH_STATE_MID_TIME_CROSOSED=2;
+	public static final int SPEECH_STATE_MAX_TIME_CROSOSED=3;
 
 	/**
 	 * The instance of the {@link SystemUiHider} for this activity.
 	 */
 	private SystemUiHider mSystemUiHider;
+	
+	public int mSpeechState = SPEECH_STATE_STARTED;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		mSpeechState = SPEECH_STATE_STARTED;
 		super.onCreate(savedInstanceState);
+		
+		// No screen off check
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		boolean keepscreenon = sharedPreferences.getBoolean("keepscreenon", true);
+		if (keepscreenon) {
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		} else {
+			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_timer);
@@ -134,48 +152,45 @@ public class Timer extends Activity {
 		
 		contentView.setOnChronometerTickListener(new OnChronometerTickListener() {
 			 
+			private static final int VIBRATION_DURATION = 1500;
+			private void vibrateIfEnabled()
+			{
+				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+				boolean vibrationOn = sharedPreferences.getBoolean("vibration", true);
+				if (vibrationOn) {
+					Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+				    vibrator.vibrate(VIBRATION_DURATION);
+				}
+			}
+			
 			@Override
 			public void onChronometerTick(Chronometer chronometer) {
 				Bundle extras = getIntent().getExtras();
-				int speech_type=0;
-				int min=0,mid=0,max=0;
-				if (extras != null) {
-					speech_type = extras.getInt("speech_type");
-				}
-				SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-				Resources res = getResources();
-				switch(speech_type)
-				{
-				case R.id.speech:
-					min = Integer.valueOf((sharedPref.getString(res.getString(R.string.speech_min_time),"0")));
-					max = Integer.valueOf((sharedPref.getString(res.getString(R.string.speech_max_time),"120")));
-					mid = (min + max)/2;
-					break;
-					
-				case R.id.table_topic:
-					min = Integer.valueOf((sharedPref.getString(res.getString(R.string.tt_min_time),"0")));
-					mid = min + 30;
-					max = mid + 30;
-					break;
-					
-				case R.id.evaluation:
-					min = Integer.valueOf((sharedPref.getString(res.getString(R.string.eval_min_time),"0")));
-					mid = min + 30;
-					max = mid + 30;
-					break;
-										
-				}
-				
-				 long timepassed = SystemClock.elapsedRealtime() - chronometer.getBase();
-				 View v = findViewById(R.id.timer_layout);
-				 if (timepassed >= max*1000)
+
+				int min=extras.getInt("min_time")*60000;
+				int max=extras.getInt("max_time")*60000;
+				int mid = (min + max)/2;				
+				long timepassed = SystemClock.elapsedRealtime() - chronometer.getBase();
+				View v = findViewById(R.id.timer_layout);
+				if (timepassed >= max && mSpeechState != SPEECH_STATE_MAX_TIME_CROSOSED) {
 					 v.setBackgroundColor(Color.RED);
-				 else if (timepassed >= mid*1000)
-					 v.setBackgroundColor(Color.rgb(255, 255, 150));
-				 else if (timepassed >= min*1000)
-					 v.setBackgroundColor(Color.GREEN);
-				 else
-					 v.setBackgroundColor(Color.WHITE);
+					 mSpeechState = SPEECH_STATE_MAX_TIME_CROSOSED;
+					 vibrateIfEnabled();
+				}
+				else if (timepassed >= mid && timepassed < max && mSpeechState != SPEECH_STATE_MID_TIME_CROSOSED) {
+					v.setBackgroundColor(Color.rgb(255, 255, 150));
+					mSpeechState = SPEECH_STATE_MID_TIME_CROSOSED;
+					vibrateIfEnabled();
+				}
+				else if (timepassed >= min && timepassed < mid && mSpeechState != SPEECH_STATE_MIN_TIME_CROSOSED) {
+					v.setBackgroundColor(Color.GREEN);
+					mSpeechState = SPEECH_STATE_MIN_TIME_CROSOSED;
+					vibrateIfEnabled();
+				}
+				else if (timepassed < min && mSpeechState != SPEECH_STATE_STARTED ){
+				 v.setBackgroundColor(Color.WHITE);
+				 mSpeechState = SPEECH_STATE_STARTED;
+				}
 			}
  
 		});
@@ -253,6 +268,7 @@ public class Timer extends Activity {
 	    	final Chronometer contentView = (Chronometer)findViewById(R.id.fullscreen_content);	    
     	    if(tb.isChecked()) {
     	    	contentView.setBase(SystemClock.elapsedRealtime());
+    	    	mSpeechState = SPEECH_STATE_STARTED;
     	    	contentView.start();
     	    } else {
     	    	contentView.stop();

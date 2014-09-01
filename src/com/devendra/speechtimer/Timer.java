@@ -74,14 +74,8 @@ public class Timer extends Activity {
 		mSpeechState = SPEECH_STATE_STARTED;
 		super.onCreate(savedInstanceState);
 		
-		// No screen off check
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		boolean keepscreenon = sharedPreferences.getBoolean("keepscreenon", true);
-		if (keepscreenon) {
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		} else {
-			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-		}
+		// No screen off 
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_timer);

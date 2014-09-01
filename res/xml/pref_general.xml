@@ -9,6 +9,5 @@
     -->
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
     <CheckBoxPreference android:title="Enable Vibration" android:key="vibration" android:enabled="true" android:summaryOff="No vibration on crossing minimum, medium, and maximum time" android:summaryOn="Vibration on crossing minimum, medium, and maximum time" android:defaultValue="true"/>
-    <CheckBoxPreference android:title="Keep screen on" android:key="keepscreenon" android:defaultValue="true" android:summaryOff="Allow screen to turn off even when timer is running" android:summaryOn="Keep screen on when timer is running"/>
 
 </PreferenceScreen>

@@ -20,6 +20,7 @@
             android:id="@+id/editText1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:ems="10"
             android:hint="@string/next_presenter"
             android:inputType="textPersonName"
@@ -28,7 +29,8 @@
         <LinearLayout
             android:id="@+id/linearLayout1"
             android:layout_height="wrap_content" 
-            android:layout_width="match_parent">
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp">
 
             <EditText
                 android:id="@+id/editText2"
@@ -85,6 +87,7 @@
             android:id="@+id/table_topic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:onClick="buttonOnClick"
             android:text="@string/table" 
             android:textStyle="bold" />
@@ -93,9 +96,11 @@
             android:id="@+id/evaluation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:onClick="buttonOnClick"
             android:text="@string/evaluation" 
             android:textStyle="bold" />
+
     </LinearLayout>
 
     <RelativeLayout

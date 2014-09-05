@@ -1,6 +1,8 @@
 package com.devendra.speechtimer;
 
 import com.devendra.speechtimer.R;
+import com.devendra.speechtimer.util.ReportData;
+import com.devendra.speechtimer.util.SpeakerEntry;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -9,18 +11,42 @@ import android.app.AlertDialog;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class MainActivity extends Activity implements TextWatcher {
 
 	static final int MAX_TIME_COUNT = 5;
+	
+	class TimerEntryDeleteClickListner implements DialogInterface.OnClickListener {
+		private int position = -1;
+		TimerEntryDeleteClickListner(int pos)
+		{
+			position = pos;
+		}
+		
+		@Override
+        public void onClick(DialogInterface dialog, int which) {
+        	ListView lv = (ListView) findViewById(R.id.listView1);
+        	ReportData rd = (ReportData)lv.getAdapter(); 
+    		SpeakerEntry se = rd.getItem(position);
+    		rd.remove(se);
+     	    rd.setChanged();
+        }
+		
+	}
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,16 +58,70 @@ public class MainActivity extends Activity implements TextWatcher {
         t1.setGravity(Gravity.CENTER);
         t1.addTextChangedListener(this);
         
-  /*      EditText t2 = (EditText)findViewById(R.id.editText3);
-        t2.setGravity(Gravity.CENTER);
-   //     t2.addTextChangedListener(this);  */
+     // Empty report text
+        TextView emptyReportText = new TextView(this);
+        emptyReportText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
+        LayoutParams.WRAP_CONTENT));
+        emptyReportText.setText("No information of recent speakers");
+        emptyReportText.setTextSize(30);
+        
+        ListView lv = (ListView) findViewById(R.id.listView1);
+        
+        lv.setEmptyView(emptyReportText);
+        RelativeLayout rl =(RelativeLayout) findViewById(R.id.reportLayout);
+        rl.addView(emptyReportText);
+        
     }
 
+    private void initializeReport()
+    {
+		ReportData rd = new ReportData(this, R.layout.report_entry, R.id.textView1);
+		ListView lv = (ListView) findViewById(R.id.listView1);
+		lv.setAdapter(rd);
+		rd.setNotifyOnChange(true);
+		
+		rd.registerDataSetObserver(new DataSetObserver() {
+			@Override
+			public void onChanged()
+			{
+				ListView lv = (ListView) findViewById(R.id.listView1);
+				Button b = (Button)findViewById(R.id.button1);
+				if (lv.getAdapter().getCount() == 0)
+					b.setVisibility(View.INVISIBLE);
+				else
+					b.setVisibility(View.VISIBLE);
+			}
+			
+			@Override
+			public void onInvalidated()
+			{
+				
+			}
+			
+		});
+		
+		Button b = (Button)findViewById(R.id.button1);
+		if (lv.getAdapter().getCount() == 0)
+			b.setVisibility(View.INVISIBLE);
+		else
+			b.setVisibility(View.VISIBLE);
+    }
+    
     @Override
     protected void onStart() {
     	super.onStart();
     	EditText nameText = (EditText) findViewById(R.id.editText1);
     	nameText.setText("");
+    	initializeReport();
+    }
+    
+    @Override
+    protected void onStop() {
+    	
+		ListView lv = (ListView) findViewById(R.id.listView1);
+		ReportData rd = (ReportData)lv.getAdapter();
+		rd.commitChanges(this);	
+		super.onStop();
     }
 
     @Override
@@ -86,12 +166,7 @@ public class MainActivity extends Activity implements TextWatcher {
         	break;
         case R.id.evaluation:
         	launchTimer(2, 3, R.id.evaluation);
-        	break;
-        
-        case R.id.report:
-        	Intent myIntent2 = new Intent(MainActivity.this, ReportActivity.class);
-        	MainActivity.this.startActivity(myIntent2);
-        break;        	
+        	break;       	
     	}              
     }
     
@@ -154,5 +229,38 @@ public class MainActivity extends Activity implements TextWatcher {
 	               }
 	        }).show();
 	    }	
+	   
+	   public void deleteAllClick(View v) {
+    	   // Ask user if he really want delete all records
+           new AlertDialog.Builder(this)
+           .setTitle("Clearing Timer Report")
+           .setMessage("Clear timer report?")
+           .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+               @Override
+               public void onClick(DialogInterface dialog, int which) {
+               	ListView lv = (ListView) findViewById(R.id.listView1);
+               	ReportData rd = (ReportData)lv.getAdapter();
+            	    rd.clear();  
+            	    rd.setChanged();
+               }
+
+           })
+           .setNegativeButton("No", null)
+           .show();
+	   }
+	   
+	   public void reportEntryDeleteClick(View v) {
+	      	ListView lv = (ListView) findViewById(R.id.listView1);
+	    		int pos = lv.getPositionForView((View)v.getParent());
+	    		
+	     	   // Ask user if he really want delete the item records
+	            new AlertDialog.Builder(this)
+	            .setTitle("Deleting Timer Entry")
+	            .setMessage("Remove this entry?")
+	            .setPositiveButton("Yes", new TimerEntryDeleteClickListner(pos))
+	            .setNegativeButton("No", null)
+	            .show();
+	   }
     
 }

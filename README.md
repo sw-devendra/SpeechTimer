@@ -4,13 +4,11 @@ SpeechTimer
 This is a simple android application which could be useful in Toastmaster meetings to perform Timer's role.
 When started, the application shows menu to select one of different types of activities of toastmaster meeting.
 
-Main Screen
+Overall Features 
 -----------
 
-![](https://github.com/devendra020280/SpeechTimer/blob/master/screenshots/Screenshots_2014-08-13-07-44-13.png)
+![](https://github.com/devendra020280/SpeechTimer/blob/master/screenshots/speechtimer_feature_screen.png)
 
-
-After user selects one activity which needs to be timed, timer screen comes up and timer starts.
 
 Timer View
 ----------
@@ -30,7 +28,7 @@ Three stages of an activity
 
 Download
 --------
-Please feel free to [download this application](https://github.com/devendra020280/SpeechTimer/raw/master/bin/SpeechTimer.apk), use it in your meetings give me your feedback.
+Please feel free to [download this application](https://play.google.com/store/apps/details?id=com.devendra.speechtimer), use it in your meetings give me your feedback.
 
 This is my first android app :-)
 

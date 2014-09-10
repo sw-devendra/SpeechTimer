@@ -1,6 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/timer_layout"
+    style="@style/AppTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/neutral"
@@ -12,11 +13,23 @@
          TextureView, etc.
     -->
 
+            <TextView
+                android:id="@+id/colorsymbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Y"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#FF000000"
+                android:textSize="@dimen/colortextsize"
+                android:visibility="invisible" />
+
     <Chronometer
-        android:id="@+id/fullscreen_content"
+        android:id="@+id/chronometer"
+        style="@style/AppTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
+        android:gravity="center_vertical|center_horizontal"
         android:keepScreenOn="true"
         android:text="@string/dummy_content"
         android:textColor="#33b5e5"
@@ -29,33 +42,32 @@
     -->
 
     <FrameLayout
+        style="@style/AppTheme"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true" >
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/fullscreen_content_controls"
             style="?buttonBarStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="bottom|center_horizontal"
             android:background="#00FFFFFF"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             tools:ignore="UselessParent" >
 
             <ToggleButton
                 android:id="@+id/toggleButton1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:onClick="toggleOnClick"
                 android:text="ToggleButton"
                 android:textOff="@string/restart"
-                android:textOn="@string/stop" 
-                android:onClick="toggleOnClick"/>
+                android:textOn="@string/stop" />
 
-        </LinearLayout>
-
-        
-
+        </RelativeLayout>
     </FrameLayout>
 
 </FrameLayout>

@@ -34,6 +34,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
          */
         public static final int activity_horizontal_margin=0x7f060000;
         public static final int activity_vertical_margin=0x7f060001;
+        public static final int colortextsize=0x7f060003;
         public static final int fadingwidth=0x7f060002;
     }
     public static final class drawable {
@@ -46,11 +47,12 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int action_settings=0x7f0a0012;
         public static final int button1=0x7f0a000a;
         public static final int buttonMaxTime=0x7f0a0004;
+        public static final int chronometer=0x7f0a000e;
+        public static final int colorsymbol=0x7f0a000d;
         public static final int editText1=0x7f0a0000;
         public static final int editText2=0x7f0a0002;
         public static final int evaluation=0x7f0a0007;
-        public static final int fullscreen_content=0x7f0a000d;
-        public static final int fullscreen_content_controls=0x7f0a000e;
+        public static final int fullscreen_content_controls=0x7f0a000f;
         public static final int imageButton1=0x7f0a0011;
         public static final int linearLayout1=0x7f0a0001;
         public static final int linearLayout2=0x7f0a000b;
@@ -58,10 +60,9 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int reportLayout=0x7f0a0008;
         public static final int speech=0x7f0a0005;
         public static final int table_topic=0x7f0a0006;
-        public static final int textView1=0x7f0a0010;
         public static final int textView2=0x7f0a0003;
         public static final int timer_layout=0x7f0a000c;
-        public static final int toggleButton1=0x7f0a000f;
+        public static final int toggleButton1=0x7f0a0010;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;

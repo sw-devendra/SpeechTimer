@@ -12,6 +12,7 @@ import com.devendra.speechtimer.util.SystemUiHider;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -19,12 +20,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Chronometer;
 import android.widget.Chronometer.OnChronometerTickListener;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.os.Vibrator;
 
@@ -81,11 +86,12 @@ public class Timer extends Activity {
 		setContentView(R.layout.activity_timer);
 
 		final View controlsView = findViewById(R.id.fullscreen_content_controls);
-		final Chronometer contentView = (Chronometer)findViewById(R.id.fullscreen_content);
+		final Chronometer contentView = (Chronometer)findViewById(R.id.chronometer);
 
+		
 		// Set up an instance of SystemUiHider to control the system UI for
 		// this activity.
-		mSystemUiHider = SystemUiHider.getInstance(this, contentView,
+		mSystemUiHider = SystemUiHider.getInstance(this, findViewById(R.id.timer_layout),
 				HIDER_FLAGS);
 		mSystemUiHider.setup();
 		mSystemUiHider
@@ -185,6 +191,30 @@ public class Timer extends Activity {
 				 v.setBackgroundColor(Color.WHITE);
 				 mSpeechState = SPEECH_STATE_STARTED;
 				}
+				
+				// Show/hide 'Y' depending on current setting
+				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+				boolean showcolorsymbol = sharedPreferences.getBoolean("showcolorsymbol", true);
+				
+				TextView tv = (TextView) findViewById(R.id.colorsymbol);
+				
+				Chronometer cm = (Chronometer) findViewById(R.id.chronometer);				
+				if (showcolorsymbol 
+						&& mSpeechState == SPEECH_STATE_MID_TIME_CROSOSED) {
+					cm.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+					tv.setVisibility(View.VISIBLE);					
+				} else {
+					 cm.setGravity(Gravity.CENTER);
+					 tv.setVisibility(View.INVISIBLE);					
+				}
+				
+				// Show/hide time depending on current setting
+				boolean showtime = sharedPreferences.getBoolean("showtime", true);
+				
+				if (showtime)
+					cm.setVisibility(View.VISIBLE);
+				else
+					cm.setVisibility(View.INVISIBLE);
 			}
  
 		});
@@ -208,7 +238,7 @@ public class Timer extends Activity {
 		{
 			writeReportToFile();
 			tb.setChecked(false);
-			Chronometer ch = (Chronometer) findViewById(R.id.fullscreen_content);
+			Chronometer ch = (Chronometer) findViewById(R.id.chronometer);
 			ch.stop();
 		}
 		
@@ -224,6 +254,25 @@ public class Timer extends Activity {
 		// are available.
 		delayedHide(100);
 	}
+	
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+            	Intent myIntent = new Intent(Timer.this, SettingsActivity.class);
+            	Timer.this.startActivity(myIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 	/**
 	 * Touch listener to use for in-layout UI controls to delay hiding the
@@ -259,7 +308,7 @@ public class Timer extends Activity {
 	
     public void toggleOnClick(View v) {
     	    ToggleButton tb = (ToggleButton) v;
-	    	final Chronometer contentView = (Chronometer)findViewById(R.id.fullscreen_content);	    
+	    	final Chronometer contentView = (Chronometer)findViewById(R.id.chronometer);	    
     	    if(tb.isChecked()) {
     	    	contentView.setBase(SystemClock.elapsedRealtime());
     	    	mSpeechState = SPEECH_STATE_STARTED;
@@ -299,7 +348,7 @@ public class Timer extends Activity {
             
             }
 
-            Chronometer contentView = (Chronometer)findViewById(R.id.fullscreen_content);
+            Chronometer contentView = (Chronometer)findViewById(R.id.chronometer);
             se.duration = contentView.getText().toString();
             
             pw.println(se.toFileLine()); 	

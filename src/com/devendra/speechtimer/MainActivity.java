@@ -75,7 +75,7 @@ public class MainActivity extends Activity implements TextWatcher {
 
     private void initializeReport()
     {
-		ReportData rd = new ReportData(this, R.layout.report_entry, R.id.textView1);
+		ReportData rd = new ReportData(this, R.layout.report_entry, R.id.colorsymbol);
 		ListView lv = (ListView) findViewById(R.id.listView1);
 		lv.setAdapter(rd);
 		rd.setNotifyOnChange(true);

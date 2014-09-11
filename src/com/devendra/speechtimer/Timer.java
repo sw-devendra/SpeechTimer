@@ -166,7 +166,6 @@ public class Timer extends Activity {
 			@Override
 			public void onChronometerTick(Chronometer chronometer) {
 				Bundle extras = getIntent().getExtras();
-
 				int min=extras.getInt("min_time")*60000;
 				int max=extras.getInt("max_time")*60000;
 				int mid = (min + max)/2;				
@@ -192,17 +191,29 @@ public class Timer extends Activity {
 				 mSpeechState = SPEECH_STATE_STARTED;
 				}
 				
-				// Show/hide 'Y' depending on current setting
+				// Show/hide Color symbol depending on current setting
 				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 				boolean showcolorsymbol = sharedPreferences.getBoolean("showcolorsymbol", true);
 				
 				TextView tv = (TextView) findViewById(R.id.colorsymbol);
 				
 				Chronometer cm = (Chronometer) findViewById(R.id.chronometer);				
-				if (showcolorsymbol 
-						&& mSpeechState == SPEECH_STATE_MID_TIME_CROSOSED) {
+				if (showcolorsymbol && mSpeechState != SPEECH_STATE_STARTED) {
+					String colorSymbol = new String();
+					switch(mSpeechState) {
+						case SPEECH_STATE_MIN_TIME_CROSOSED:
+							colorSymbol = "G";
+							break;
+						case SPEECH_STATE_MID_TIME_CROSOSED:
+							colorSymbol = "Y";
+							break;
+						case SPEECH_STATE_MAX_TIME_CROSOSED:
+							colorSymbol = "R";
+							break;
+					};
 					cm.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-					tv.setVisibility(View.VISIBLE);					
+					tv.setVisibility(View.VISIBLE);
+					tv.setText(colorSymbol);
 				} else {
 					 cm.setGravity(Gravity.CENTER);
 					 tv.setVisibility(View.INVISIBLE);					

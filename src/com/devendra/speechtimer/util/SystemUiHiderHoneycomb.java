@@ -6,6 +6,7 @@ import android.os.Build;
 import android.view.View;
 import android.view.WindowManager;
 
+
 /**
  * An API 11+ implementation of {@link SystemUiHider}. Uses APIs available in
  * Honeycomb and later (specifically {@link View#setSystemUiVisibility(int)}) to

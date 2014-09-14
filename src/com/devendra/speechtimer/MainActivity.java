@@ -1,16 +1,23 @@
 package com.devendra.speechtimer;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.Date;
+
 import com.devendra.speechtimer.R;
 import com.devendra.speechtimer.util.ReportData;
 import com.devendra.speechtimer.util.SpeakerEntry;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.DataSetObserver;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,14 +27,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class MainActivity extends Activity implements TextWatcher {
 
 	static final int MAX_TIME_COUNT = 5;
+	private boolean mQuickTimerRunning = false;
+	private String mElapsedTime = "";
 	
 	class TimerEntryDeleteClickListner implements DialogInterface.OnClickListener {
 		private int position = -1;
@@ -50,6 +61,66 @@ public class MainActivity extends Activity implements TextWatcher {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SetupActivity();
+    }
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+
+		// Trigger the initial hide() shortly after the activity has been
+		// created, to briefly hint to the user that UI controls
+		// are available.
+        // Set text of quick timer
+        Chronometer qt = (Chronometer) findViewById(R.id.quicktimer);
+        if (!mQuickTimerRunning) {
+        	qt.setText("Quick Timer");
+        }
+        else {
+        	String timeFields[] = mElapsedTime.split(":");
+        	qt.setBase(SystemClock.elapsedRealtime() 
+        			- Integer.parseInt(timeFields[0])*60000 - Integer.parseInt(timeFields[1])*1000);
+        	qt.start();
+        }
+	}
+    
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+      super.onSaveInstanceState(savedInstanceState);
+      // Save UI state changes to the savedInstanceState.
+      // This bundle will be passed to onCreate if the process is
+      // killed and restarted.
+      savedInstanceState.putBoolean("quickTimerRunning", mQuickTimerRunning);
+      Chronometer qt = (Chronometer) findViewById(R.id.quicktimer);
+      if (mQuickTimerRunning)
+    	  savedInstanceState.putString("timeElapsed", qt.getText().toString());
+      
+      // etc.
+    }
+    
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+      super.onRestoreInstanceState(savedInstanceState);
+      // Restore UI state from the savedInstanceState.
+      // This bundle has also been passed to onCreate.
+      mQuickTimerRunning = savedInstanceState.getBoolean("quickTimerRunning");
+      
+      if (mQuickTimerRunning)
+    	  mElapsedTime = savedInstanceState.getString("timeElapsed");
+    }
+    
+    
+	@Override
+	public void onBackPressed()
+	{
+		if (mQuickTimerRunning)
+			updateModelAndFile();
+		
+		super.onBackPressed();
+	}
+    
+    private void SetupActivity()
+    {
 		PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
         setContentView(R.layout.activity_main);
      
@@ -69,9 +140,8 @@ public class MainActivity extends Activity implements TextWatcher {
         lv.setEmptyView(emptyReportText);
         RelativeLayout rl =(RelativeLayout) findViewById(R.id.reportLayout);
         rl.addView(emptyReportText);
-        
+   	
     }
-
     private void initializeReport()
     {
 		ReportData rd = new ReportData(this, R.layout.report_entry, R.id.colorsymbol);
@@ -116,7 +186,6 @@ public class MainActivity extends Activity implements TextWatcher {
     
     @Override
     protected void onStop() {
-    	
 		ListView lv = (ListView) findViewById(R.id.listView1);
 		ReportData rd = (ReportData)lv.getAdapter();
 		rd.commitChanges(this);	
@@ -169,6 +238,20 @@ public class MainActivity extends Activity implements TextWatcher {
     	}              
     }
     
+    public void quickTimerOnClick(View v) {
+    	Chronometer quicktimer = (Chronometer) findViewById(R.id.quicktimer);
+    	if (!mQuickTimerRunning) {
+    		quicktimer.setBase(SystemClock.elapsedRealtime());
+    		quicktimer.start();
+    		mQuickTimerRunning = true;
+    	}
+    	else {
+    		quicktimer.stop();
+    		updateModelAndFile();
+    		mQuickTimerRunning = false;
+    		quicktimer.setText("Quick Timer");
+    	}
+    }
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
@@ -262,4 +345,38 @@ public class MainActivity extends Activity implements TextWatcher {
 	            .show();
 	   }
     
+	    private void updateModelAndFile()
+	    {
+	    	File file = new File(this.getFilesDir(), SpeakerEntry.REPORT_FILE);
+	    	
+	    	long l = file.lastModified();
+	    	Date now = new Date();
+	    	
+	    	try 
+	    	{
+	            FileWriter fw = new FileWriter(file, 
+	            		file.exists() && (now.getTime() - l < SpeakerEntry.MAX_MEET_DURATION)) ;
+	            PrintWriter pw = new PrintWriter(fw);
+	            
+	            SpeakerEntry se = new SpeakerEntry();
+	            se.name = "";
+	            se.type = "Quick Timer";
+	            Chronometer contentView = (Chronometer)findViewById(R.id.quicktimer);
+	            se.duration = contentView.getText().toString();
+	            
+	            // Update report model
+               	ListView lv = (ListView) findViewById(R.id.listView1);
+               	ReportData rd = (ReportData)lv.getAdapter();
+               	rd.add(se); 
+            	rd.setChanged();
+	            
+	            pw.println(se.toFileLine()); 	
+	            pw.close();
+	            fw.close();
+	    	}
+	    	catch(Exception e)
+	    	{
+	    		// Ignore if file could not be write
+	    	}	
+	    }
 }

@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editText1"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
         android:layout_marginTop="24dp" >
 
         <EditText
@@ -77,7 +77,7 @@
         android:id="@+id/table_topic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText1"
+        android:layout_alignParentLeft="true"
         android:layout_below="@+id/linearLayout1"
         android:layout_marginTop="15dp"
         android:onClick="buttonOnClick"
@@ -88,7 +88,8 @@
         android:id="@+id/evaluation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/table_topic"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/table_topic"
         android:layout_below="@+id/table_topic"
         android:onClick="buttonOnClick"
         android:text="@string/evaluation" 
@@ -120,5 +121,21 @@
              android:textStyle="bold" />
 
     </RelativeLayout>
+
+    <Chronometer
+         android:id="@+id/quicktimer"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_above="@+id/reportLayout"
+         android:layout_alignParentRight="true"
+         android:layout_alignTop="@+id/table_topic"
+         android:layout_toRightOf="@+id/linearLayout1"
+         android:background="@drawable/qtbackground"
+         android:onClick="quickTimerOnClick"
+         android:gravity="center_vertical|center_horizontal|center"
+         android:textSize="30sp"
+         android:textStyle="bold"
+         android:text="Quick Timer"
+         android:clickable="true"/>
 
 </RelativeLayout>

@@ -76,7 +76,6 @@ public class Timer extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		mSpeechState = SPEECH_STATE_STARTED;
 		super.onCreate(savedInstanceState);
 		
 		// No screen off 
@@ -88,11 +87,14 @@ public class Timer extends Activity {
 		final View controlsView = findViewById(R.id.fullscreen_content_controls);
 		final Chronometer contentView = (Chronometer)findViewById(R.id.chronometer);
 
+		// Setup Initial timer state
+		View timerLayout = findViewById(R.id.timer_layout);
+		timerLayout.setBackgroundColor(Color.WHITE);
+		mSpeechState = SPEECH_STATE_STARTED;
 		
 		// Set up an instance of SystemUiHider to control the system UI for
 		// this activity.
-		mSystemUiHider = SystemUiHider.getInstance(this, findViewById(R.id.timer_layout),
-				HIDER_FLAGS);
+		mSystemUiHider = SystemUiHider.getInstance(this, timerLayout,HIDER_FLAGS);
 		mSystemUiHider.setup();
 		mSystemUiHider
 				.setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {

@@ -96,6 +96,17 @@
             android:onClick="buttonOnClick"
             android:text="@string/evaluation" 
             android:textStyle="bold" />
+       <Chronometer
+	         android:id="@+id/quicktimer"
+	         android:layout_width="match_parent"
+	         android:layout_height="wrap_content"
+	         android:background="@drawable/qtbackground"
+	         android:onClick="quickTimerOnClick"
+	         android:gravity="center_vertical|center_horizontal|center"
+	         android:textSize="30sp"
+	         android:textStyle="bold"
+	         android:text="Quick Timer"
+	         android:clickable="true"/>
     </LinearLayout>
 
     <RelativeLayout

@@ -6,7 +6,7 @@
     <string name="speech">Speech</string>
     <string name="evaluation">Evaluation</string>
     <string name="table">Table topic</string>
-    <string name="whole_meeting">Whole Meeting</string>
+    <string name="WholeMeeting">Whole Meeting</string>
     <string name="title_activity_timer">Timer</string>
     <string name="restart">Restart</string>
     <string name="stop">Stop</string>

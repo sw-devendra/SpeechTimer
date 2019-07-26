@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -130,53 +131,126 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
-        android:layout_below="@+id/specialSpeeches">
-        <LinearLayout
+        android:layout_below="@+id/specialSpeeches"
+        android:padding="0dp">
+        <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:layout_margin="0dp">
+
             <Chronometer
                 android:id="@+id/wholemeeting"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:clickable="true"
-                android:layout_gravity="fill"
+                android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:clickable="true"
                 android:elevation="4dp"
                 android:gravity="center_vertical|center_horizontal|center"
-                android:onClick="wholeTimerOnClick"
+                android:onClick="specialTimerOnClick"
+                android:tag="@string/WholeMeeting"
                 android:text="@string/QuickTimer"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/neutral"
                 android:textStyle="bold" />
 
-        </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/wholeMeetingLog"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:onClick="logSpecialTimer"
+                android:tag="@string/WholeMeeting"
+                app:srcCompat="@drawable/ic_action_log" />
+
+            <ImageButton
+                android:id="@+id/wholeMeetingStop"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:onClick="stopSpecialTimer"
+                android:tag="@string/WholeMeeting"
+                app:srcCompat="@drawable/ic_action_stop" />
+
+            <ImageButton
+                android:id="@+id/wholeMeetingPlay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:onClick="playPauseSpecialTimer"
+                android:tag="@string/WholeMeeting"
+                app:srcCompat="@drawable/ic_action_play" />
+
+
+        </GridLayout>
     </android.support.v7.widget.Toolbar>
     <android.support.v7.widget.Toolbar
         android:id="@+id/quicktimerTB"
         style="@style/HeaderBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:elevation="4dp"
-        android:layout_below="@+id/wholemeetingTB">
-        <LinearLayout
+        android:layout_below="@+id/wholemeetingTB"
+        android:padding="0dp">
+        <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_margin="0dp">
+
             <Chronometer
                 android:id="@+id/quicktimer"
-                android:layout_height="match_parent"
                 android:layout_width="wrap_content"
-                android:clickable="true"
-                android:layout_gravity="fill"
+                android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:clickable="true"
                 android:elevation="4dp"
                 android:gravity="center_vertical|center_horizontal|center"
-                android:onClick="quickTimerOnClick"
+                android:onClick="specialTimerOnClick"
+                android:tag="@string/QuickTimer"
                 android:text="@string/QuickTimer"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/neutral"
                 android:textStyle="bold" />
-        </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/quickTimerLog"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:onClick="logSpecialTimer"
+                android:tag="@string/QuickTimer"
+                app:srcCompat="@drawable/ic_action_log" />
+
+            <ImageButton
+                android:id="@+id/quickTimerStop"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:onClick="stopSpecialTimer"
+                android:tag="@string/QuickTimer"
+                app:srcCompat="@drawable/ic_action_stop" />
+
+            <ImageButton
+                android:id="@+id/quickTimerPlay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:onClick="playPauseSpecialTimer"
+                android:tag="@string/QuickTimer"
+                app:srcCompat="@drawable/ic_action_play" />
+
+
+        </GridLayout>
     </android.support.v7.widget.Toolbar>
     <RelativeLayout
         android:id="@+id/reportLayout"

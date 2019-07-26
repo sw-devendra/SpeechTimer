@@ -5,7 +5,7 @@
     <string name="speech">준비한 연설</string>
     <string name="evaluation">평가</string>
     <string name="table">테이블 토픽</string>
-    <string name="whole_meeting">전체 회의</string>
+    <string name="WholeMeeting">전체 회의</string>
     <string name="title_activity_timer">타이머</string>
     <string name="restart">다시 시작</string>
     <string name="stop">중지</string>

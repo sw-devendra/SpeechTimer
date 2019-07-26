@@ -3,11 +3,13 @@ package com.devendra.speechtimer;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
-import com.devendra.speechtimer.R;
 import com.devendra.speechtimer.util.ReportData;
 import com.devendra.speechtimer.util.SpeakerEntry;
 
@@ -17,46 +19,52 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.DataSetObserver;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity implements TextWatcher {
 
 	static final int MAX_TIME_COUNT = 11;
-	private boolean mQuickTimerRunning = false;
-	private boolean mWholeMeetingRunning = false;
+	static final int STOPPED = 1;
+	static final int PAUSED = 2;
+	static final int RUNNING = 3;
+	private int mQuickTimerState = STOPPED;
+	private int mWholeTimerState = STOPPED;
 	private String mElapsedTime = "";
+	class SpecialTimerData
+	{
+		public int timerId;
+		public int playPauseId;
+		public int logId;
+		public int stopId;
+		public int timerState;
+	};
+	private HashMap<String, SpecialTimerData> helperMap = new HashMap<>();
+
 	OnSharedPreferenceChangeListener prefListener;
 
 	
@@ -146,8 +154,28 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
 		getSupportActionBar().setIcon(R.drawable.ic_launcher);
-		setTimerInitState(R.id.quicktimer,R.string.QuickTimer, mQuickTimerRunning);
-		setTimerInitState(R.id.wholemeeting,R.string.whole_meeting, mWholeMeetingRunning);
+
+
+		SpecialTimerData std =  new SpecialTimerData();
+		std.timerId = R.id.quicktimer;
+		std.logId = R.id.quickTimerLog;
+		std.playPauseId = R.id.quickTimerPlay;
+		std.stopId = R.id.quickTimerStop;
+		std.timerState = STOPPED;
+
+		helperMap.put(getResources().getString(R.string.QuickTimer), std);
+
+		SpecialTimerData std2 =  new SpecialTimerData();
+		std2.timerId = R.id.wholemeeting;
+		std2.logId = R.id.wholeMeetingLog;
+		std2.playPauseId = R.id.wholeMeetingPlay;
+		std2.stopId = R.id.wholeMeetingStop;
+		std2.timerState = STOPPED;
+		helperMap.put(getResources().getString(R.string.WholeMeeting), std2);
+
+		setTimerInitState(R.id.quicktimer,R.string.QuickTimer);
+		setTimerInitState(R.id.wholemeeting,R.string.WholeMeeting);
+
 	}
     
     @Override
@@ -156,12 +184,18 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
       // Save UI state changes to the savedInstanceState.
       // This bundle will be passed to onCreate if the process is
       // killed and restarted.
-      savedInstanceState.putBoolean("quickTimerRunning", mQuickTimerRunning);
-      Chronometer qt = (Chronometer) findViewById(R.id.quicktimer);
-      if (mQuickTimerRunning)
-    	  savedInstanceState.putString("timeElapsed", qt.getText().toString());
-      
-      // etc.
+      savedInstanceState.putInt("quickTimerState", mQuickTimerState);
+      Chronometer qt = findViewById(R.id.quicktimer);
+      if (mQuickTimerState == RUNNING)
+    	  savedInstanceState.putString("quickTimeElapsed", qt.getText().toString());
+
+      savedInstanceState.putInt("wholeTimerState", mWholeTimerState);
+      qt = findViewById(R.id.wholemeeting);
+		if (mWholeTimerState == RUNNING)
+			savedInstanceState.putString("wholeTimeElapsed", qt.getText().toString());
+
+
+		// etc.
     }
     
     @Override
@@ -169,17 +203,21 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
       super.onRestoreInstanceState(savedInstanceState);
       // Restore UI state from the savedInstanceState.
       // This bundle has also been passed to onCreate.
-      mQuickTimerRunning = savedInstanceState.getBoolean("quickTimerRunning");
+      mQuickTimerState = savedInstanceState.getInt("quickTimerState");
+      mWholeTimerState= savedInstanceState.getInt("wholeTimerState");
       
-      if (mQuickTimerRunning)
-    	  mElapsedTime = savedInstanceState.getString("timeElapsed");
+      if (mQuickTimerState == RUNNING)
+    	  mElapsedTime = savedInstanceState.getString("quickTimeElapsed");
+
+      if (mWholeTimerState == RUNNING)
+      	mElapsedTime = savedInstanceState.getString("wholeTimeElapsed");
     }
     
     
 	@Override
 	public void onBackPressed()
 	{
-		if (mQuickTimerRunning)
+		if (mQuickTimerState == RUNNING || mWholeTimerState == RUNNING)
 			updateModelAndFile();
 		
 		super.onBackPressed();
@@ -363,18 +401,25 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
     	MainActivity.this.startActivity(myIntent);
     }
 
-    private void setTimerInitState(int timerID, int labelID, boolean timerState) {
-		Chronometer qt = (Chronometer) findViewById(timerID);
-		if (!timerState) {
-			qt.setText(getResources().getString(labelID));
+    private void setTimerInitState(int timerID, int labelID) {
+		Chronometer timer = (Chronometer) findViewById(timerID);
+		String label = getResources().getString(labelID);
+		SpecialTimerData std = helperMap.get(label);
+		if (std.timerState == STOPPED) {
+			timer.setText(label);
+
+			findViewById(std.logId).setVisibility(View.INVISIBLE);
+			findViewById(std.playPauseId).setVisibility(View.INVISIBLE);
+			findViewById(std.stopId).setVisibility(View.INVISIBLE);
 		}
 		else {
 			String timeFields[] = mElapsedTime.split(":");
-			qt.setBase(SystemClock.elapsedRealtime()
+			timer.setBase(SystemClock.elapsedRealtime()
 					- Integer.parseInt(timeFields[0])*60000 - Integer.parseInt(timeFields[1])*1000);
-			qt.start();
+			timer.start();
 		}
-		updateTimerIcon(timerID, timerState);
+		helperMap.put(label, std);
+
 	}
     public void buttonOnClick(View v) {
     	switch(v.getId()) {
@@ -392,39 +437,63 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
         	break;       	
     	}              
     }
-    
-    public void quickTimerOnClick(View v) {
-    	Chronometer quicktimer = (Chronometer) findViewById(R.id.quicktimer);
-    	if (!mQuickTimerRunning) {
-    		quicktimer.setBase(SystemClock.elapsedRealtime());
-    		quicktimer.start();
-    		mQuickTimerRunning = true;
-    	}
-    	else {
-    		quicktimer.stop();
-    		updateModelAndFile();
-    		mQuickTimerRunning = false;
-    		quicktimer.setText(getResources().getString(R.string.QuickTimer));
-    	}
-    	// Update icon
-    	updateTimerIcon(R.id.quicktimer, mQuickTimerRunning);
-    }
 
-	public void wholeTimerOnClick(View v) {
-		Chronometer timer = (Chronometer) findViewById(R.id.wholemeeting);
-		if (!mWholeMeetingRunning) {
+    // Whole and Quick Timer functions
+
+	private void setSpecialTimerInitState() {
+		// All the buttons should be hidden
+
+
+	}
+	public void specialTimerOnClick(View v) {
+		String tag = (String) v.getTag();
+		SpecialTimerData std = helperMap.get(tag);
+		Chronometer timer = findViewById(std.timerId);
+		ImageButton playPause = findViewById(std.playPauseId);
+		if (std.timerState == STOPPED) {
 			timer.setBase(SystemClock.elapsedRealtime());
 			timer.start();
-			mWholeMeetingRunning = true;
+
+			playPause.setImageResource(R.drawable.ic_action_pause);
+			playPause.setVisibility(View.VISIBLE);
+			findViewById(std.logId).setVisibility(View.VISIBLE);
+			findViewById(std.stopId).setVisibility(View.VISIBLE);
+			std.timerState = RUNNING;
 		}
-		else {
+		else if (std.timerState == RUNNING) {
 			timer.stop();
 			updateModelAndFile();
-			mWholeMeetingRunning = false;
-			timer.setText(getResources().getString(R.string.whole_meeting));
+			std.timerState = PAUSED;
+
+			playPause.setImageResource(R.drawable.ic_action_play);
+			playPause.setVisibility(View.VISIBLE);
+			findViewById(std.logId).setVisibility(View.VISIBLE);
+			findViewById(std.stopId).setVisibility(View.VISIBLE);
 		}
-		// Update icon
-		updateTimerIcon(R.id.wholemeeting, mWholeMeetingRunning);
+		helperMap.put(tag, std);
+	}
+
+	public void logSpecialTimer(View v) {
+	}
+
+	public void stopSpecialTimer(View v) {
+		String tag = (String) v.getTag();
+		SpecialTimerData std = helperMap.get(tag);
+		Chronometer timer = findViewById(std.timerId);
+
+		ImageButton playPause = findViewById(std.playPauseId);
+
+		timer.stop();
+		timer.setText(tag);
+		updateModelAndFile();
+		std.timerState = STOPPED;
+		playPause.setVisibility(View.INVISIBLE);
+		findViewById(std.logId).setVisibility(View.INVISIBLE);
+		findViewById(std.stopId).setVisibility(View.INVISIBLE);
+
+	}
+
+	public void playPauseSpecialTimer(View v) {
 	}
 
     public boolean onOptionsItemSelected(MenuItem item) {

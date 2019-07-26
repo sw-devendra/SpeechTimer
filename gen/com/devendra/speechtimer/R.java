@@ -8,6 +8,10 @@
 package com.devendra.speechtimer;
 
 public final class R {
+    public static final class array {
+        public static final int langcodes=0x7f090001;
+        public static final int languages=0x7f090000;
+    }
     public static final class attr {
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
@@ -42,27 +46,37 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int maxeditbg=0x7f020001;
         public static final int mineditbg=0x7f020002;
         public static final int partsbg=0x7f020003;
+        public static final int qtbackground=0x7f020004;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a0012;
-        public static final int button1=0x7f0a000a;
-        public static final int buttonMaxTime=0x7f0a0004;
-        public static final int chronometer=0x7f0a000e;
-        public static final int colorsymbol=0x7f0a000d;
-        public static final int editText1=0x7f0a0000;
-        public static final int editText2=0x7f0a0002;
-        public static final int evaluation=0x7f0a0007;
-        public static final int fullscreen_content_controls=0x7f0a000f;
-        public static final int imageButton1=0x7f0a0011;
-        public static final int linearLayout1=0x7f0a0001;
-        public static final int linearLayout2=0x7f0a000b;
-        public static final int listView1=0x7f0a0009;
-        public static final int reportLayout=0x7f0a0008;
-        public static final int speech=0x7f0a0005;
-        public static final int table_topic=0x7f0a0006;
-        public static final int textView2=0x7f0a0003;
-        public static final int timer_layout=0x7f0a000c;
-        public static final int toggleButton1=0x7f0a0010;
+        public static final int action_settings=0x7f07001a;
+        public static final int button1=0x7f07000c;
+        public static final int buttonMaxTime=0x7f070005;
+        public static final int chronometer=0x7f070011;
+        public static final int colorsymbol=0x7f070010;
+        public static final int editText1=0x7f070001;
+        public static final int editText2=0x7f070003;
+        public static final int entryEdit=0x7f070018;
+        public static final int evaluation=0x7f070009;
+        public static final int fullscreen_content_controls=0x7f070012;
+        public static final int help=0x7f07001b;
+        public static final int imageButton1=0x7f070019;
+        public static final int linearLayout1=0x7f070002;
+        public static final int linearLayout2=0x7f07000e;
+        public static final int listView1=0x7f07000b;
+        public static final int maxTimeOnTimer=0x7f070014;
+        public static final int minBeforSpeech=0x7f070006;
+        public static final int minTimeOnTimer=0x7f070013;
+        public static final int nameEditText=0x7f070000;
+        public static final int nameOnTimer=0x7f070015;
+        public static final int quicktimer=0x7f07000d;
+        public static final int reportLayout=0x7f07000a;
+        public static final int speech=0x7f070007;
+        public static final int table_topic=0x7f070008;
+        public static final int textView1=0x7f070017;
+        public static final int timer_layout=0x7f07000f;
+        public static final int toInSpeech=0x7f070004;
+        public static final int toggleButton1=0x7f070016;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -70,37 +84,52 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int report_entry=0x7f030002;
     }
     public static final class menu {
-        public static final int main=0x7f090000;
-        public static final int report=0x7f090001;
+        public static final int main=0x7f0b0000;
     }
     public static final class string {
-        public static final int action_settings=0x7f070001;
-        public static final int app_name=0x7f070000;
-        public static final int dummy_button=0x7f070007;
-        public static final int dummy_content=0x7f070008;
-        public static final int eval_min_time=0x7f070010;
-        public static final int evaluation=0x7f070004;
-        public static final int hello_world=0x7f070002;
-        public static final int minimum_time=0x7f07000d;
-        public static final int next_presenter=0x7f070013;
-        public static final int play=0x7f070009;
-        /**  Strings related to Settings 
+        public static final int DeleteAll=0x7f08000c;
+        public static final int NoRecentSpeakers=0x7f08000b;
+        public static final int QuickTimer=0x7f08000a;
+        public static final int ScaleHelp=0x7f08000d;
+        public static final int action_settings=0x7f080001;
+        public static final int app_name=0x7f080000;
+        public static final int cancel=0x7f080024;
+        public static final int clearReportDlgTitle=0x7f08001c;
+        public static final int enterName=0x7f080022;
+        public static final int evaluation=0x7f080003;
+        public static final int gyrSetTitle=0x7f080013;
+        public static final int gyrSummaryOff=0x7f080015;
+        public static final int gyrSummaryOn=0x7f080014;
+        public static final int helpVideo=0x7f08000f;
+        public static final int language=0x7f08000e;
+        public static final int min=0x7f080020;
+        public static final int next_presenter=0x7f080008;
+        public static final int no=0x7f08001b;
+        public static final int ok=0x7f080023;
+        /**  Example General settings 
+ Strings related to Settings 
  Example General settings 
          */
-        public static final int pref_header_general=0x7f070017;
-        public static final int report=0x7f070012;
-        public static final int restart=0x7f07000a;
-        public static final int speech=0x7f070003;
-        public static final int speech_max_time=0x7f070015;
-        public static final int speech_min_max_diff=0x7f070014;
-        public static final int speech_min_time=0x7f07000e;
-        public static final int stop=0x7f07000b;
-        public static final int table=0x7f070005;
-        public static final int title_activity_report=0x7f070011;
-        public static final int title_activity_settings=0x7f070016;
-        public static final int title_activity_test=0x7f07000c;
-        public static final int title_activity_timer=0x7f070006;
-        public static final int tt_min_time=0x7f07000f;
+        public static final int pref_header_general=0x7f08001f;
+        public static final int removeEntryDlgTitle=0x7f080019;
+        public static final int report=0x7f080026;
+        public static final int restart=0x7f080006;
+        public static final int speakerName=0x7f08001e;
+        public static final int speech=0x7f080002;
+        public static final int speech_max_time=0x7f080009;
+        public static final int stop=0x7f080007;
+        public static final int table=0x7f080004;
+        public static final int timerSetTittle=0x7f080016;
+        public static final int timerSummaryOff=0x7f080018;
+        public static final int timerSummaryOn=0x7f080017;
+        public static final int title_activity_report=0x7f080025;
+        public static final int title_activity_settings=0x7f08001d;
+        public static final int title_activity_timer=0x7f080005;
+        public static final int to=0x7f080021;
+        public static final int vibSummaryOff=0x7f080012;
+        public static final int vibSummaryOn=0x7f080011;
+        public static final int vibrationSetTitle=0x7f080010;
+        public static final int yes=0x7f08001a;
     }
     public static final class style {
         /** 
@@ -127,15 +156,15 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f080000;
+        public static final int AppBaseTheme=0x7f0a0000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f080001;
-        public static final int ButtonBar=0x7f080003;
-        public static final int ButtonBarButton=0x7f080004;
-        public static final int FullscreenActionBarStyle=0x7f080005;
-        public static final int FullscreenTheme=0x7f080002;
+        public static final int AppTheme=0x7f0a0001;
+        public static final int ButtonBar=0x7f0a0003;
+        public static final int ButtonBarButton=0x7f0a0004;
+        public static final int FullscreenActionBarStyle=0x7f0a0005;
+        public static final int FullscreenTheme=0x7f0a0002;
     }
     public static final class xml {
         public static final int pref_general=0x7f040000;

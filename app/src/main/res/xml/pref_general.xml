@@ -1,0 +1,16 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
+    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+
+    <!--
+         NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
+         dismiss it.
+    -->
+    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
+    <CheckBoxPreference android:title="@string/vibrationSetTitle" android:key="vibration" android:enabled="true" android:summaryOff="@string/vibSummaryOff" android:summaryOn="@string/vibSummaryOn" android:defaultValue="true"/>
+    <CheckBoxPreference android:title="@string/gyrSetTitle" android:defaultValue="true" android:summaryOff="@string/gyrSummaryOff" android:key="showcolorsymbol" android:summaryOn="@string/gyrSummaryOn"/>
+    <CheckBoxPreference android:title="@string/timerSetTittle" android:defaultValue="true" android:summaryOff="@string/timerSummaryOff" android:key="showtime" android:summaryOn="@string/timerSummaryOn"/>
+    <ListPreference android:entries="@array/languages" android:entryValues="@array/langcodes" android:title="@string/language" android:defaultValue="en" android:key="language"/>
+
+</PreferenceScreen>

@@ -1,0 +1,129 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/timer_layout"
+    style="@style/AppTheme"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/neutral"
+    tools:context=".Timer" >
+
+    <!--
+         The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc.
+    -->
+
+            <TextView
+                android:id="@+id/colorsymbol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Y"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#FF000000"
+                android:textSize="@dimen/colortextsize"
+                android:visibility="invisible" />
+
+    <Chronometer
+        android:id="@+id/chronometer"
+        style="@style/AppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:keepScreenOn="true"
+        android:text=""
+        android:textColor="#33b5e5"
+        android:textSize="50sp"
+        android:textStyle="bold" 
+        android:singleLine="true"/>
+
+    <!--
+         This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows.
+    -->
+
+    <FrameLayout
+        style="@style/AppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true" >
+
+        <RelativeLayout
+            android:id="@+id/fullscreen_content_controls"
+            style="?buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="#00FFFFFF"
+            android:orientation="vertical"
+            tools:ignore="UselessParent" >
+            <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+            <LinearLayout
+    android:focusable="true" android:focusableInTouchMode="true"
+    android:layout_width="0px" android:layout_height="0px"/>
+        <EditText
+            android:id="@+id/minTimeOnTimer"
+            android:layout_width="51dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/mineditbg"
+            android:ems="10"
+            android:inputType="number"
+            android:maxLength="2"
+            android:selectAllOnFocus="true"
+            android:text="5"
+            android:textColor="@color/neutral"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/maxTimeOnTimer"
+            android:layout_width="51dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/minTimeOnTimer"
+            android:background="@drawable/maxeditbg"
+            android:onClick="maxButtonOnClick"
+            android:text="7"
+            android:textColor="@color/neutral"
+            android:textStyle="bold" />
+          <EditText
+        	android:id="@+id/nameOnTimer"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/maxTimeOnTimer"
+            android:layout_alignParentRight="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+        	android:ems="10"
+        	android:textColor="#FF000000"
+        	android:hint="@string/speakerName"
+        	android:inputType="textPersonName"
+        	android:selectAllOnFocus="true" />
+        
+            <ToggleButton
+                android:id="@+id/toggleButton1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:onClick="toggleOnClick"
+                android:text="ToggleButton"
+                android:textOff="@string/restart"
+                android:textOn="@string/stop" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/toggleButton1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="24dp"
+                android:text="@string/ScaleHelp"
+                android:textAppearance="?android:attr/textAppearanceMedium" 
+                android:textColor="#FFAAAAAA"/>
+
+        </RelativeLayout>
+    </FrameLayout>
+
+</FrameLayout>

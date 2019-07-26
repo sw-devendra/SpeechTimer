@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SpeechTimer</string>
+    <string name="action_settings">설정</string>
+    <string name="speech">준비한 연설</string>
+    <string name="evaluation">평가</string>
+    <string name="table">테이블 토픽</string>
+    <string name="whole_meeting">전체 회의</string>
+    <string name="title_activity_timer">타이머</string>
+    <string name="restart">다시 시작</string>
+    <string name="stop">중지</string>
+    <string name="title_activity_report">타이머 보고서</string>
+    <string name="report">보고서</string>
+    <string name="next_presenter">다음 발표자 누구입니까?</string>
+    <string name="speech_max_time">최대 시간</string>
+    <string name="QuickTimer">퀵 타이머</string>
+    <string name="NoRecentSpeakers">최근 스피커의 정보 없음</string>
+    <string name="DeleteAll">모두 삭제</string>
+    <string name="ScaleHelp">터치 및 핀치하여 턱스트 크기 조절!</string>
+    <string name="language">언어</string>
+    <string name="helpVideo">도움말 비디오</string>
+    <string name="vibrationSetTitle">진동을 가능하게</string>
+    <string name="vibSummaryOn">최소 중간 최대 시간 초과시 진동</string>
+    <string name="vibSummaryOff">최소 중간 최대 시간 초과시 진동 하지않음</string>
+    <string name="gyrSetTitle">타이머에 G,Y,R 텍스트 표시</string>
+    <string name="gyrSummaryOn">타이머에 G,Y,R 텍스트 표시</string>
+    <string name="gyrSummaryOff">타이머에 G,Y,R 텍스트 표시하지않음</string>
+    <string name="timerSetTittle">타이머에 시간표시</string>
+    <string name="timerSummaryOn">타이머에 시간표시</string>
+    <string name="timerSummaryOff">타이머에 시간표시하지않음</string>
+    <string name="removeEntryDlgTitle">해당 기록삭제 ?</string>
+    <string name="yes">네</string>
+    <string name="no">아니</string>
+    <string name="clearReportDlgTitle">전체 기록삭제?</string>
+    
+    <string name="title_activity_settings">설정</string>
+
+    <!-- Strings related to Settings -->
+
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+    <string name="min">분</string>
+    <string name="to">-</string>
+    <string name="enterName">이름 입력</string>
+</resources>

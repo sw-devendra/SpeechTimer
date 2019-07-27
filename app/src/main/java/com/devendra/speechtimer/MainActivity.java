@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import com.devendra.speechtimer.util.ReportData;
 import com.devendra.speechtimer.util.SpeakerEntry;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		public int logId;
 		public int stopId;
 		public int timerState;
+		public long lastPauseTime;
 	};
 	private HashMap<String, SpecialTimerData> helperMap = new HashMap<>();
 
@@ -155,13 +157,13 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
 		getSupportActionBar().setIcon(R.drawable.ic_launcher);
 
-
 		SpecialTimerData std =  new SpecialTimerData();
 		std.timerId = R.id.quicktimer;
 		std.logId = R.id.quickTimerLog;
 		std.playPauseId = R.id.quickTimerPlay;
 		std.stopId = R.id.quickTimerStop;
 		std.timerState = STOPPED;
+		std.lastPauseTime = 0;
 
 		helperMap.put(getResources().getString(R.string.QuickTimer), std);
 
@@ -171,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		std2.playPauseId = R.id.wholeMeetingPlay;
 		std2.stopId = R.id.wholeMeetingStop;
 		std2.timerState = STOPPED;
+		std2.lastPauseTime = 0;
 		helperMap.put(getResources().getString(R.string.WholeMeeting), std2);
 
 		setTimerInitState(R.id.quicktimer,R.string.QuickTimer);
@@ -218,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	public void onBackPressed()
 	{
 		if (mQuickTimerState == RUNNING || mWholeTimerState == RUNNING)
-			updateModelAndFile();
+			updateModelAndFile("back", false);
 		
 		super.onBackPressed();
 	}
@@ -299,26 +302,11 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	    ((Chronometer) findViewById(R.id.quicktimer)).setText(R.string.QuickTimer);
 	    
     }
-    
-    private void updateTimerIcon(int timerId, boolean runningStatus)
-    {
-    	/*Chronometer timer= (Chronometer) findViewById(timerId);
-    	Drawable d;
-    	if (runningStatus)
-    		d = getResources().getDrawable(android.R.drawable.ic_media_pause);
-    	else
-    		d = getResources().getDrawable(android.R.drawable.ic_media_play);
-    	
-		d.setBounds(0,0,d.getIntrinsicWidth(), d.getIntrinsicHeight());
-		if (getResources().getConfiguration().orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-			timer.setCompoundDrawables(null, null, null, d);
-		else
-			timer.setCompoundDrawables(null, null, d, null); */
-    }
+
     private void initializeReport()
     {
 		ReportData rd = new ReportData(this, R.layout.report_entry, R.id.colorsymbol);
-		ListView lv = (ListView) findViewById(R.id.reportListView);
+		ListView lv = findViewById(R.id.reportListView);
 		lv.setAdapter(rd);
 		rd.setNotifyOnChange(true);
 		
@@ -408,9 +396,9 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		if (std.timerState == STOPPED) {
 			timer.setText(label);
 
-			findViewById(std.logId).setVisibility(View.INVISIBLE);
-			findViewById(std.playPauseId).setVisibility(View.INVISIBLE);
-			findViewById(std.stopId).setVisibility(View.INVISIBLE);
+			findViewById(std.logId).setVisibility(View.GONE);
+			findViewById(std.playPauseId).setVisibility(View.GONE);
+			findViewById(std.stopId).setVisibility(View.GONE);
 		}
 		else {
 			String timeFields[] = mElapsedTime.split(":");
@@ -438,13 +426,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
     	}              
     }
 
-    // Whole and Quick Timer functions
 
-	private void setSpecialTimerInitState() {
-		// All the buttons should be hidden
-
-
-	}
 	public void specialTimerOnClick(View v) {
 		String tag = (String) v.getTag();
 		SpecialTimerData std = helperMap.get(tag);
@@ -459,21 +441,16 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 			findViewById(std.logId).setVisibility(View.VISIBLE);
 			findViewById(std.stopId).setVisibility(View.VISIBLE);
 			std.timerState = RUNNING;
+			std.lastPauseTime = 0;
 		}
-		else if (std.timerState == RUNNING) {
-			timer.stop();
-			updateModelAndFile();
-			std.timerState = PAUSED;
-
-			playPause.setImageResource(R.drawable.ic_action_play);
-			playPause.setVisibility(View.VISIBLE);
-			findViewById(std.logId).setVisibility(View.VISIBLE);
-			findViewById(std.stopId).setVisibility(View.VISIBLE);
+		else {
+			playPauseSpecialTimer(v);
 		}
 		helperMap.put(tag, std);
 	}
 
 	public void logSpecialTimer(View v) {
+		updateModelAndFile((String)v.getTag(), true);
 	}
 
 	public void stopSpecialTimer(View v) {
@@ -483,17 +460,46 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 
 		ImageButton playPause = findViewById(std.playPauseId);
 
+		updateModelAndFile(tag, false);
 		timer.stop();
 		timer.setText(tag);
-		updateModelAndFile();
 		std.timerState = STOPPED;
-		playPause.setVisibility(View.INVISIBLE);
-		findViewById(std.logId).setVisibility(View.INVISIBLE);
-		findViewById(std.stopId).setVisibility(View.INVISIBLE);
+		playPause.setVisibility(View.GONE);
+		findViewById(std.logId).setVisibility(View.GONE);
+		findViewById(std.stopId).setVisibility(View.GONE);
 
 	}
 
 	public void playPauseSpecialTimer(View v) {
+		String tag = (String) v.getTag();
+		SpecialTimerData std = helperMap.get(tag);
+		Chronometer timer = findViewById(std.timerId);
+
+		ImageButton playPause = findViewById(std.playPauseId);
+
+		if (std.timerState == RUNNING) {
+			timer.stop();
+			std.timerState = PAUSED;
+			std.lastPauseTime = SystemClock.elapsedRealtime();
+			playPause.setImageResource(R.drawable.ic_action_play);
+			playPause.setVisibility(View.VISIBLE);
+			findViewById(std.logId).setVisibility(View.VISIBLE);
+			findViewById(std.stopId).setVisibility(View.VISIBLE);
+		}
+		else if (std.timerState == PAUSED) {
+
+			timer.start();
+			std.timerState = RUNNING;
+			long intervalOnPause = (SystemClock.elapsedRealtime() - std.lastPauseTime);
+			timer.setBase( timer.getBase() + intervalOnPause );
+
+			playPause.setImageResource(R.drawable.ic_action_pause);
+			playPause.setVisibility(View.VISIBLE);
+			findViewById(std.logId).setVisibility(View.VISIBLE);
+			findViewById(std.stopId).setVisibility(View.VISIBLE);
+		}
+
+		helperMap.put(tag, std);
 	}
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -633,8 +639,30 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	            .show();
 	   }
     
-	    private void updateModelAndFile()
+	    private void updateModelAndFile(String tag, boolean log)
 	    {
+			Vector<String> tags = new Vector<>();
+
+
+	    	if (tag == "back") { // Is it a call from Back button handler?
+	    		String tag1 = getResources().getString(R.string.QuickTimer);
+	    		SpecialTimerData std = helperMap.get(tag1);
+	    		if (std.timerState != STOPPED) {
+	    			tags.add(tag1);
+				}
+				String tag2 = getResources().getString(R.string.WholeMeeting);
+				if (helperMap.get(tag2).timerState != STOPPED) {
+					tags.add(tag2);
+				}
+
+				if(tags.size() == 0) {
+					return; // No Special timer was running when back pressed
+				}
+			}
+	    	else {
+	    		tags.add(tag);
+			}
+
 	    	File file = new File(this.getFilesDir(), SpeakerEntry.REPORT_FILE);
 	    	
 	    	long l = file.lastModified();
@@ -645,20 +673,23 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	            FileWriter fw = new FileWriter(file, 
 	            		file.exists() && (now.getTime() - l < SpeakerEntry.MAX_MEET_DURATION)) ;
 	            PrintWriter pw = new PrintWriter(fw);
-	            
-	            SpeakerEntry se = new SpeakerEntry();
-	            se.name = "";
-	            se.type = "Quick Timer";
-	            Chronometer contentView = (Chronometer)findViewById(R.id.quicktimer);
-	            se.duration = contentView.getText().toString();
-	            
-	            // Update report model
-               	ListView lv = (ListView) findViewById(R.id.reportListView);
-               	ReportData rd = (ReportData)lv.getAdapter();
-               	rd.add(se); 
-            	rd.setChanged();
-	            
-	            pw.println(se.toFileLine()); 	
+
+				// Update report model
+				ListView lv = (ListView) findViewById(R.id.reportListView);
+				ReportData rd = (ReportData)lv.getAdapter();
+
+	            for (String t: tags) {
+					SpeakerEntry se = new SpeakerEntry();
+					se.name = (log?"Elapsed":"");
+					se.type = t;
+					SpecialTimerData std = helperMap.get(t);
+					Chronometer contentView = findViewById(std.timerId);
+					se.duration = contentView.getText().toString();
+					rd.add(se);
+					pw.println(se.toFileLine());
+				}
+
+            	rd.setChanged(); // Modal changed
 	            pw.close();
 	            fw.close();
 	    	}

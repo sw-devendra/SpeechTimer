@@ -7,6 +7,6 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         app:showAsAction="ifRoom"
-        android:title="@+id/action_settings" android:menuCategory="system" android:icon="@android:drawable/ic_menu_preferences" />
-    <item android:id="@+id/help" android:title="@string/helpVideo" android:orderInCategory="120" android:icon="@android:drawable/ic_menu_help" app:showAsAction="ifRoom" />
+        android:title="@+id/action_settings" android:menuCategory="system" android:icon="@drawable/ic_round_settings_24px" />
+    <item android:id="@+id/help" android:title="@string/helpVideo" android:orderInCategory="120" android:icon="@drawable/ic_round_help_24px" app:showAsAction="ifRoom" />
 </menu>

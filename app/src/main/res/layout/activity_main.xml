@@ -127,7 +127,7 @@
 </GridLayout>
     <android.support.v7.widget.Toolbar
         android:id="@+id/wholemeetingTB"
-        style="@style/HeaderBar"
+        android:background="@drawable/wmbackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
@@ -162,6 +162,7 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:onClick="logSpecialTimer"
+                android:elevation="16dp"
                 android:tag="@string/WholeMeeting"
                 app:srcCompat="@drawable/ic_action_log" />
 
@@ -172,6 +173,7 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:onClick="stopSpecialTimer"
+                android:elevation="16dp"
                 android:tag="@string/WholeMeeting"
                 app:srcCompat="@drawable/ic_action_stop" />
 
@@ -183,6 +185,7 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:onClick="playPauseSpecialTimer"
+                android:elevation="16dp"
                 android:tag="@string/WholeMeeting"
                 app:srcCompat="@drawable/ic_action_play" />
 
@@ -191,11 +194,12 @@
     </android.support.v7.widget.Toolbar>
     <android.support.v7.widget.Toolbar
         android:id="@+id/quicktimerTB"
-        style="@style/HeaderBar"
+        android:background="@drawable/qtbackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
         android:layout_below="@+id/wholemeetingTB"
+        android:layout_marginTop="4dp"
         android:padding="0dp">
         <GridLayout
             android:layout_width="match_parent"
@@ -225,6 +229,7 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:onClick="logSpecialTimer"
+                android:elevation="16dp"
                 android:tag="@string/QuickTimer"
                 app:srcCompat="@drawable/ic_action_log" />
 
@@ -235,6 +240,7 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:onClick="stopSpecialTimer"
+                android:elevation="16dp"
                 android:tag="@string/QuickTimer"
                 app:srcCompat="@drawable/ic_action_stop" />
 
@@ -246,6 +252,7 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:onClick="playPauseSpecialTimer"
+                android:elevation="16dp"
                 android:tag="@string/QuickTimer"
                 app:srcCompat="@drawable/ic_action_play" />
 

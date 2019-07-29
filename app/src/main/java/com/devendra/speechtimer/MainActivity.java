@@ -53,9 +53,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	static final int STOPPED = 1;
 	static final int PAUSED = 2;
 	static final int RUNNING = 3;
-	private int mQuickTimerState = STOPPED;
-	private int mWholeTimerState = STOPPED;
-	private String mElapsedTime = "";
+
 	class SpecialTimerData
 	{
 		public int timerId;
@@ -64,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		public int stopId;
 		public int timerState;
 		public long lastPauseTime;
+		public String elapsedTime;
 	};
 	private HashMap<String, SpecialTimerData> helperMap = new HashMap<>();
 
@@ -157,6 +156,16 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
 		getSupportActionBar().setIcon(R.drawable.ic_launcher);
 
+		if (helperMap.size() == 0) // If the helper map was not initialized in onRestoreInstanceState() (means no orientation change case)
+        	initHelperMap();
+
+		setTimerInitState(R.id.quicktimer,R.string.QuickTimer);
+		setTimerInitState(R.id.wholemeeting,R.string.WholeMeeting);
+
+	}
+
+	private void initHelperMap() {
+		helperMap.clear();
 		SpecialTimerData std =  new SpecialTimerData();
 		std.timerId = R.id.quicktimer;
 		std.logId = R.id.quickTimerLog;
@@ -175,10 +184,6 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		std2.timerState = STOPPED;
 		std2.lastPauseTime = 0;
 		helperMap.put(getResources().getString(R.string.WholeMeeting), std2);
-
-		setTimerInitState(R.id.quicktimer,R.string.QuickTimer);
-		setTimerInitState(R.id.wholemeeting,R.string.WholeMeeting);
-
 	}
     
     @Override
@@ -187,18 +192,13 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
       // Save UI state changes to the savedInstanceState.
       // This bundle will be passed to onCreate if the process is
       // killed and restarted.
-      savedInstanceState.putInt("quickTimerState", mQuickTimerState);
-      Chronometer qt = findViewById(R.id.quicktimer);
-      if (mQuickTimerState == RUNNING)
-    	  savedInstanceState.putString("quickTimeElapsed", qt.getText().toString());
-
-      savedInstanceState.putInt("wholeTimerState", mWholeTimerState);
-      qt = findViewById(R.id.wholemeeting);
-		if (mWholeTimerState == RUNNING)
-			savedInstanceState.putString("wholeTimeElapsed", qt.getText().toString());
-
-
-		// etc.
+		for (Map.Entry<String, SpecialTimerData> entry : helperMap.entrySet()) {
+			SpecialTimerData std = entry.getValue();
+			savedInstanceState.putInt(entry.getKey() + "State", std.timerState);
+			Chronometer qt = findViewById(std.timerId);
+			if (std.timerState != STOPPED)
+				savedInstanceState.putString(entry.getKey() + "Elapsed", qt.getText().toString());
+		}
     }
     
     @Override
@@ -206,21 +206,24 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
       super.onRestoreInstanceState(savedInstanceState);
       // Restore UI state from the savedInstanceState.
       // This bundle has also been passed to onCreate.
-      mQuickTimerState = savedInstanceState.getInt("quickTimerState");
-      mWholeTimerState= savedInstanceState.getInt("wholeTimerState");
-      
-      if (mQuickTimerState == RUNNING)
-    	  mElapsedTime = savedInstanceState.getString("quickTimeElapsed");
-
-      if (mWholeTimerState == RUNNING)
-      	mElapsedTime = savedInstanceState.getString("wholeTimeElapsed");
+		initHelperMap();
+		for (Map.Entry<String, SpecialTimerData> entry : helperMap.entrySet()) {
+			SpecialTimerData std = entry.getValue();
+			std.timerState = savedInstanceState.getInt(entry.getKey() + "State");
+			if (std.timerState != STOPPED)
+				std.elapsedTime = savedInstanceState.getString(entry.getKey() + "Elapsed");
+			helperMap.put(entry.getKey(),std);
+		}
     }
-    
-    
+
 	@Override
 	public void onBackPressed()
 	{
-		if (mQuickTimerState == RUNNING || mWholeTimerState == RUNNING)
+		boolean updateModel = false;
+		for (Map.Entry<String, SpecialTimerData> entry : helperMap.entrySet()) {
+			updateModel = (updateModel || (entry.getValue().timerState != STOPPED));
+		}
+		if (updateModel)
 			updateModelAndFile("back", false);
 		
 		super.onBackPressed();
@@ -401,7 +404,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 			findViewById(std.stopId).setVisibility(View.GONE);
 		}
 		else {
-			String timeFields[] = mElapsedTime.split(":");
+			String timeFields[] = std.elapsedTime.split(":");
 			timer.setBase(SystemClock.elapsedRealtime()
 					- Integer.parseInt(timeFields[0])*60000 - Integer.parseInt(timeFields[1])*1000);
 			timer.start();

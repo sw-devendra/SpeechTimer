@@ -3,17 +3,19 @@ package com.devendra.speechtimer;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
+import com.devendra.speechtimer.util.RecyclerViewAdapter;
 import com.devendra.speechtimer.util.ReportData;
 import com.devendra.speechtimer.util.SpeakerEntry;
+import com.devendra.speechtimer.util.SwipeToDeleteCallback;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +31,8 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.DataSetObserver;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -46,7 +50,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 public class MainActivity extends AppCompatActivity implements TextWatcher {
 
 	static final int MAX_TIME_COUNT = 11;
@@ -66,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	};
 	private HashMap<String, SpecialTimerData> helperMap = new HashMap<>();
 
+	// Recycle View Implementation
+	RecyclerView recyclerView;
+	RecyclerViewAdapter mAdapter;
 	OnSharedPreferenceChangeListener prefListener;
 
 	
@@ -79,11 +87,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		
 		@Override
         public void onClick(DialogInterface dialog, int which) {
-        	ListView lv = (ListView) findViewById(R.id.reportListView);
-        	ReportData rd = (ReportData)lv.getAdapter(); 
-    		SpeakerEntry se = rd.getItem(position);
-    		rd.remove(se);
-     	    rd.setChanged();
+        	// ToDo: Remove
         }		
 	}
 	
@@ -99,14 +103,12 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		@Override
         public void onClick(DialogInterface dialog, int which) {
 			if (!editedName.isEmpty()) {
-				ListView lv = (ListView) findViewById(R.id.reportListView);
-	        	ReportData rd = (ReportData)lv.getAdapter(); 
-	    		SpeakerEntry se = rd.getItem(position);
-	    		rd.remove(se);
-	
+	    		SpeakerEntry se = mAdapter.getData().get(position);
 	    		se.name = editedName;
-	    		rd.insert(se, position);
-	     	    rd.setChanged();
+				mAdapter.getData().remove(position);
+	     	    mAdapter.getData().add(position, se);
+	     	    mAdapter.setChanged();
+	     	    mAdapter.notifyItemChanged(position);
 			}
 			getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
@@ -238,10 +240,10 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		
         setContentView(R.layout.activity_main);
      
-        EditText t1 = (EditText)findViewById(R.id.editText2);
+        EditText t1 = findViewById(R.id.editText2);
         t1.setGravity(Gravity.CENTER);
         t1.addTextChangedListener(this);
-        
+        /*
      // Empty report text
         TextView emptyReportText = new TextView(this);
         emptyReportText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -249,12 +251,8 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
         emptyReportText.setText(getResources().getString(R.string.NoRecentSpeakers));
         emptyReportText.setTextSize(30);
         
-        ListView lv = (ListView) findViewById(R.id.reportListView);
-        
-        lv.setEmptyView(emptyReportText);
-        RelativeLayout rl =(RelativeLayout) findViewById(R.id.reportLayout);
-        rl.addView(emptyReportText);
-   	
+        RelativeLayout rl =findViewById(R.id.reportLayout);
+        rl.addView(emptyReportText); */
     }
     
     private void registerLangChangeListner()
@@ -299,60 +297,49 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	    ((Button) findViewById(R.id.speech)).setText(R.string.speech);
 	    ((Button) findViewById(R.id.table_topic)).setText(R.string.table);
 	    ((Button) findViewById(R.id.evaluation)).setText(R.string.evaluation);
-	    TextView emptyView = (TextView) ((ListView) findViewById(R.id.reportListView)).getEmptyView();
-	    emptyView.setText(R.string.NoRecentSpeakers);
+		((TextView) findViewById(R.id.emptyReportText)).setText(R.string.NoRecentSpeakers);
 	    ((Button) findViewById(R.id.button1)).setText(R.string.DeleteAll);
 	    ((Chronometer) findViewById(R.id.quicktimer)).setText(R.string.QuickTimer);
-	    
     }
+
+	private void handleCountChange() {
+		RecyclerView lv = findViewById(R.id.recyclerView);
+		Button b = findViewById(R.id.deletAll);
+		TextView tv = findViewById(R.id.emptyReportText);
+		if (lv.getAdapter().getItemCount() == 0) {
+			tv.setVisibility(View.VISIBLE);
+			b.setVisibility(View.GONE);
+		}
+		else {
+			tv.setVisibility(View.GONE);
+			b.setVisibility(View.VISIBLE);
+		}
+	}
 
     private void initializeReport()
     {
-		ReportData rd = new ReportData(this, R.layout.report_entry, R.id.colorsymbol);
-		ListView lv = findViewById(R.id.reportListView);
-		lv.setAdapter(rd);
-		rd.setNotifyOnChange(true);
-		
-		rd.registerDataSetObserver(new DataSetObserver() {
-			@Override
-			public void onChanged()
-			{
-				ListView lv = (ListView) findViewById(R.id.reportListView);
-				Button b = (Button)findViewById(R.id.deletAll);
-				if (lv.getAdapter().getCount() == 0)
-					b.setVisibility(View.INVISIBLE);
-				else
-					b.setVisibility(View.VISIBLE);
-			}
-			
-			@Override
-			public void onInvalidated()
-			{
-				
-			}
-			
-		});
-		
-		Button b = (Button)findViewById(R.id.deletAll);
-		if (lv.getAdapter().getCount() == 0)
-			b.setVisibility(View.INVISIBLE);
-		else
-			b.setVisibility(View.VISIBLE);
+		// Recycler view
+		recyclerView = findViewById(R.id.recyclerView);
+		Button b = findViewById(R.id.deletAll);
+
+		mAdapter = new RecyclerViewAdapter(this);
+		recyclerView.setAdapter(mAdapter);
+		handleCountChange();
+
+		enableSwipeToDeleteAndUndo();
     }
     
     @Override
     protected void onStart() {
     	super.onStart();
-    	EditText nameText = (EditText) findViewById(R.id.editText1);
+    	EditText nameText = findViewById(R.id.editText1);
     	nameText.setText("");
     	initializeReport();
     }
     
     @Override
     protected void onStop() {
-		ListView lv = (ListView) findViewById(R.id.reportListView);
-		ReportData rd = (ReportData)lv.getAdapter();
-		rd.commitChanges(this);	
+		mAdapter.commitChanges(this);
 		super.onStop();
     }
 
@@ -580,10 +567,10 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 
                @Override
                public void onClick(DialogInterface dialog, int which) {
-               	ListView lv = (ListView) findViewById(R.id.reportListView);
-               	ReportData rd = (ReportData)lv.getAdapter();
-            	    rd.clear();  
-            	    rd.setChanged();
+               	mAdapter.getData().clear();
+               	mAdapter.notifyDataSetChanged();
+               	mAdapter.setChanged();
+               	handleCountChange();
                }
 
            })
@@ -592,8 +579,8 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	   }
 	   
 	   public void reportEntryEditClick(View v) {
- 	      	    ListView lv = (ListView) findViewById(R.id.reportListView);
- 	    		int pos = lv.getPositionForView((View)v.getParent());    		
+ 	      	    RecyclerView lv = findViewById(R.id.recyclerView);
+		        int pos = lv.getChildAdapterPosition((View)v.getParent().getParent());
 	     	   // Ask user if he really want delete the item records
 
 	    		TimerEntryEditClickListner nameEditorDlgListner = new TimerEntryEditClickListner(pos);
@@ -631,15 +618,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	   }
 	   
 	   public void reportEntryDeleteClick(View v) {
-	      	ListView lv = (ListView) findViewById(R.id.reportListView);
-	    		int pos = lv.getPositionForView((View)v.getParent());
-	    		
-	     	   // Ask user if he really want delete the item records
-	            new AlertDialog.Builder(this)
-	            .setMessage(R.string.removeEntryDlgTitle)
-	            .setPositiveButton(R.string.yes, new TimerEntryDeleteClickListner(pos))
-	            .setNegativeButton(R.string.no, null)
-	            .show();
+	      	// ToDo: Remove
 	   }
     
 	    private void updateModelAndFile(String tag, boolean log)
@@ -678,8 +657,6 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	            PrintWriter pw = new PrintWriter(fw);
 
 				// Update report model
-				ListView lv = (ListView) findViewById(R.id.reportListView);
-				ReportData rd = (ReportData)lv.getAdapter();
 
 	            for (String t: tags) {
 					SpeakerEntry se = new SpeakerEntry();
@@ -688,17 +665,50 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 					SpecialTimerData std = helperMap.get(t);
 					Chronometer contentView = findViewById(std.timerId);
 					se.duration = contentView.getText().toString();
-					rd.add(se);
+					mAdapter.getData().add(se);
 					pw.println(se.toFileLine());
 				}
-
-            	rd.setChanged(); // Modal changed
 	            pw.close();
 	            fw.close();
+				handleCountChange();
 	    	}
 	    	catch(Exception e)
 	    	{
 	    		// Ignore if file could not be write
 	    	}	
 	    }
+
+	private void enableSwipeToDeleteAndUndo() {
+		SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(this) {
+			@Override
+			public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+
+				final int position = viewHolder.getAdapterPosition();
+				final SpeakerEntry item = mAdapter.getData().get(position);
+
+				mAdapter.removeItem(position);
+				handleCountChange();
+
+				Snackbar snackbar = Snackbar
+						.make(findViewById(R.id.recyclerView), "Item was removed from the list.", Snackbar.LENGTH_LONG);
+				snackbar.setAction("UNDO", new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+
+						mAdapter.restoreItem(item, position);
+						recyclerView.scrollToPosition(position);
+						handleCountChange();
+					}
+				});
+
+				snackbar.setActionTextColor(Color.YELLOW);
+				snackbar.show();
+
+			}
+		};
+
+		ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+		itemTouchhelper.attachToRecyclerView(recyclerView);
+	}
 }

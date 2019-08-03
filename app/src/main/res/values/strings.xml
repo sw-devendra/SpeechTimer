@@ -25,6 +25,20 @@
         <item >en</item>
         <item >ko</item>
     </string-array>
+    <string-array name="vibrationStr">
+        <item >Very Soft</item>
+        <item >Soft</item>
+        <item >Normal</item>
+        <item >Strong</item>
+        <item >Very Strong</item>
+    </string-array>
+    <string-array name="durations">
+        <item>100</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+        <item>3000</item>
+    </string-array>
     <string name="helpVideo">Help Video</string>
     <string name="vibrationSetTitle">Enable vibration</string>
     <string name="vibSummaryOn">Vibration on crossing minimum, medium, and maximum time</string>
@@ -51,6 +65,9 @@
     <string name="enterName">Enter Name</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    
+
+    <!-- Vibration Settings -->
+    <string name="pref_vibration_strength">Vibration Strength</string>
+
     
 </resources>

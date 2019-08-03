@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.text.Editable;
@@ -212,7 +213,7 @@ public class Timer extends Activity implements TextWatcher{
 				boolean vibrationOn = sharedPreferences.getBoolean("vibration", true);
 				if (vibrationOn) {
 					Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-				    vibrator.vibrate(VIBRATION_DURATION);
+				    vibrator.vibrate(VibrationEffect.createOneShot(100,VibrationEffect.DEFAULT_AMPLITUDE));
 				}
 			}
 			

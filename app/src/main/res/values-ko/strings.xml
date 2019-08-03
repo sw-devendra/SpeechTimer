@@ -43,4 +43,8 @@
     <string name="min">분</string>
     <string name="to">-</string>
     <string name="enterName">이름 입력</string>
+
+    <!-- Vibration Settings -->
+    <string name="pref_vibration_strength">진동 강도</string>
+
 </resources>

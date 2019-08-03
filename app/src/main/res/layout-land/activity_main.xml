@@ -295,8 +295,6 @@
                 android:layout_above="@+id/deletAll"
                 android:orientation="vertical"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
-
-
             <Button
                 android:id="@+id/deletAll"
                 android:layout_width="match_parent"

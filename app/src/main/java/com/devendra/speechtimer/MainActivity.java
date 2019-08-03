@@ -3,7 +3,6 @@ package com.devendra.speechtimer;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -11,7 +10,6 @@ import java.util.Map;
 import java.util.Vector;
 
 import com.devendra.speechtimer.util.RecyclerViewAdapter;
-import com.devendra.speechtimer.util.ReportData;
 import com.devendra.speechtimer.util.SpeakerEntry;
 import com.devendra.speechtimer.util.SwipeToDeleteCallback;
 
@@ -30,7 +28,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.database.DataSetObserver;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -42,13 +39,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -298,13 +292,13 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	    ((Button) findViewById(R.id.table_topic)).setText(R.string.table);
 	    ((Button) findViewById(R.id.evaluation)).setText(R.string.evaluation);
 		((TextView) findViewById(R.id.emptyReportText)).setText(R.string.NoRecentSpeakers);
-	    ((Button) findViewById(R.id.button1)).setText(R.string.DeleteAll);
+	    ((Button) findViewById(R.id.deleteAll)).setText(R.string.DeleteAll);
 	    ((Chronometer) findViewById(R.id.quicktimer)).setText(R.string.QuickTimer);
     }
 
 	private void handleCountChange() {
 		RecyclerView lv = findViewById(R.id.recyclerView);
-		Button b = findViewById(R.id.deletAll);
+		Button b = findViewById(R.id.deleteAll);
 		TextView tv = findViewById(R.id.emptyReportText);
 		if (lv.getAdapter().getItemCount() == 0) {
 			tv.setVisibility(View.VISIBLE);
@@ -320,8 +314,6 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
     {
 		// Recycler view
 		recyclerView = findViewById(R.id.recyclerView);
-		Button b = findViewById(R.id.deletAll);
-
 		mAdapter = new RecyclerViewAdapter(this);
 		recyclerView.setAdapter(mAdapter);
 		handleCountChange();

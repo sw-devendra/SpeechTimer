@@ -42,6 +42,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.support.v7.widget.RecyclerView;
@@ -63,27 +64,15 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		public long lastPauseTime;
 		public String elapsedTime;
 	};
-	private HashMap<String, SpecialTimerData> helperMap = new HashMap<>();
+
+	// Using Timer View Id as key because tags/string are language dependent and at time of run time
+	// language change result may be unexpected as old stored key will be accessed by their translated version
+	private HashMap<Integer, SpecialTimerData> helperMap = new HashMap<>();
 
 	// Recycle View Implementation
 	RecyclerView recyclerView;
 	RecyclerViewAdapter mAdapter;
 	OnSharedPreferenceChangeListener prefListener;
-
-	
-	class TimerEntryDeleteClickListner implements DialogInterface.OnClickListener {
-		private int position = -1;
-
-		TimerEntryDeleteClickListner(int pos)
-		{
-			position = pos;
-		}
-		
-		@Override
-        public void onClick(DialogInterface dialog, int which) {
-        	// ToDo: Remove
-        }		
-	}
 	
 	class TimerEntryEditClickListner implements DialogInterface.OnClickListener, TextWatcher{
 		private int position = -1;
@@ -115,13 +104,11 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		@Override
 		public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
 				int arg3) {
-			// TODO Auto-generated method stub
 			
 		}
 
 		@Override
 		public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-			// TODO Auto-generated method stub
 			
 		}
 
@@ -170,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		std.timerState = STOPPED;
 		std.lastPauseTime = 0;
 
-		helperMap.put(getResources().getString(R.string.QuickTimer), std);
+		helperMap.put( R.id.quicktimer, std);
 
 		SpecialTimerData std2 =  new SpecialTimerData();
 		std2.timerId = R.id.wholemeeting;
@@ -179,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		std2.stopId = R.id.wholeMeetingStop;
 		std2.timerState = STOPPED;
 		std2.lastPauseTime = 0;
-		helperMap.put(getResources().getString(R.string.WholeMeeting), std2);
+		helperMap.put(R.id.wholemeeting, std2);
 	}
     
     @Override
@@ -188,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
       // Save UI state changes to the savedInstanceState.
       // This bundle will be passed to onCreate if the process is
       // killed and restarted.
-		for (Map.Entry<String, SpecialTimerData> entry : helperMap.entrySet()) {
+		for (Map.Entry<Integer, SpecialTimerData> entry : helperMap.entrySet()) {
 			SpecialTimerData std = entry.getValue();
 			savedInstanceState.putInt(entry.getKey() + "State", std.timerState);
 			Chronometer qt = findViewById(std.timerId);
@@ -203,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
       // Restore UI state from the savedInstanceState.
       // This bundle has also been passed to onCreate.
 		initHelperMap();
-		for (Map.Entry<String, SpecialTimerData> entry : helperMap.entrySet()) {
+		for (Map.Entry<Integer, SpecialTimerData> entry : helperMap.entrySet()) {
 			SpecialTimerData std = entry.getValue();
 			std.timerState = savedInstanceState.getInt(entry.getKey() + "State");
 			if (std.timerState != STOPPED)
@@ -216,11 +203,11 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	public void onBackPressed()
 	{
 		boolean updateModel = false;
-		for (Map.Entry<String, SpecialTimerData> entry : helperMap.entrySet()) {
+		for (Map.Entry<Integer, SpecialTimerData> entry : helperMap.entrySet()) {
 			updateModel = (updateModel || (entry.getValue().timerState != STOPPED));
 		}
 		if (updateModel)
-			updateModelAndFile("back", false);
+			updateModelAndFile(0, false); // 0 ==> Back key pressed
 		
 		super.onBackPressed();
 	}
@@ -372,9 +359,9 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
     }
 
     private void setTimerInitState(int timerID, int labelID) {
-		Chronometer timer = (Chronometer) findViewById(timerID);
+		Chronometer timer = findViewById(timerID);
 		String label = getResources().getString(labelID);
-		SpecialTimerData std = helperMap.get(label);
+		SpecialTimerData std = helperMap.get(timerID);
 		if (std.timerState == STOPPED) {
 			timer.setText(label);
 
@@ -388,7 +375,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 					- Integer.parseInt(timeFields[0])*60000 - Integer.parseInt(timeFields[1])*1000);
 			timer.start();
 		}
-		helperMap.put(label, std);
+		helperMap.put(timerID, std);
 
 	}
     public void buttonOnClick(View v) {
@@ -410,8 +397,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 
 
 	public void specialTimerOnClick(View v) {
-		String tag = (String) v.getTag();
-		SpecialTimerData std = helperMap.get(tag);
+		SpecialTimerData std = helperMap.get(v.getId());
 		Chronometer timer = findViewById(std.timerId);
 		ImageButton playPause = findViewById(std.playPauseId);
 		if (std.timerState == STOPPED) {
@@ -428,21 +414,21 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		else {
 			playPauseSpecialTimer(v);
 		}
-		helperMap.put(tag, std);
+		helperMap.put(std.timerId, std);
 	}
 
 	public void logSpecialTimer(View v) {
-		updateModelAndFile((String)v.getTag(), true);
+		updateModelAndFile(findTargetTimerId(v), true);
 	}
 
 	public void stopSpecialTimer(View v) {
 		String tag = (String) v.getTag();
-		SpecialTimerData std = helperMap.get(tag);
+		SpecialTimerData std = helperMap.get(findTargetTimerId(v));
 		Chronometer timer = findViewById(std.timerId);
 
 		ImageButton playPause = findViewById(std.playPauseId);
 
-		updateModelAndFile(tag, false);
+		updateModelAndFile(findTargetTimerId(v), false);
 		timer.stop();
 		timer.setText(tag);
 		std.timerState = STOPPED;
@@ -454,7 +440,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 
 	public void playPauseSpecialTimer(View v) {
 		String tag = (String) v.getTag();
-		SpecialTimerData std = helperMap.get(tag);
+		SpecialTimerData std = helperMap.get(findTargetTimerId(v));
 		Chronometer timer = findViewById(std.timerId);
 
 		ImageButton playPause = findViewById(std.playPauseId);
@@ -481,7 +467,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 			findViewById(std.stopId).setVisibility(View.VISIBLE);
 		}
 
-		helperMap.put(tag, std);
+		helperMap.put(std.timerId, std);
 	}
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -512,7 +498,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		if (s.length() > 0)
 			minNum = Integer.parseInt(arg0.toString());
 
-		Button maxEdit = (Button)findViewById(R.id.buttonMaxTime);
+		Button maxEdit = findViewById(R.id.buttonMaxTime);
 			
 		maxEdit.setText(Integer.toString(Math.min(minNum + 2, 99), 10)); 
 
@@ -608,33 +594,27 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	    		}
 	    		dialog.show();
 	   }
-	   
-	   public void reportEntryDeleteClick(View v) {
-	      	// ToDo: Remove
-	   }
+
     
-	    private void updateModelAndFile(String tag, boolean log)
+	    private void updateModelAndFile(Integer timerId, boolean log)
 	    {
-			Vector<String> tags = new Vector<>();
+			Vector<Integer> timerIds = new Vector<>();
 
 
-	    	if (tag == "back") { // Is it a call from Back button handler?
-	    		String tag1 = getResources().getString(R.string.QuickTimer);
-	    		SpecialTimerData std = helperMap.get(tag1);
-	    		if (std.timerState != STOPPED) {
-	    			tags.add(tag1);
+	    	if (timerId == 0) { // Is it a call from Back button handler?
+	    		if (helperMap.get(R.id.quicktimer).timerState != STOPPED) {
+	    			timerIds.add(R.id.quicktimer);
 				}
-				String tag2 = getResources().getString(R.string.WholeMeeting);
-				if (helperMap.get(tag2).timerState != STOPPED) {
-					tags.add(tag2);
+				if (helperMap.get(R.id.wholemeeting).timerState != STOPPED) {
+					timerIds.add(R.id.wholemeeting);
 				}
 
-				if(tags.size() == 0) {
+				if(timerIds.size() == 0) {
 					return; // No Special timer was running when back pressed
 				}
 			}
 	    	else {
-	    		tags.add(tag);
+	    		timerIds.add(timerId);
 			}
 
 	    	File file = new File(this.getFilesDir(), SpeakerEntry.REPORT_FILE);
@@ -650,10 +630,10 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 
 				// Update report model
 
-	            for (String t: tags) {
+	            for (Integer t: timerIds) {
 					SpeakerEntry se = new SpeakerEntry();
 					se.name = (log?"Elapsed":"");
-					se.type = t;
+					se.type = findViewById(t).getTag().toString();
 					SpecialTimerData std = helperMap.get(t);
 					Chronometer contentView = findViewById(std.timerId);
 					se.duration = contentView.getText().toString();
@@ -702,5 +682,16 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 
 		ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
 		itemTouchhelper.attachToRecyclerView(recyclerView);
+	}
+
+	private int findTargetTimerId(View v) {
+		GridLayout viewParent =  (GridLayout)v.getParent();
+		for (int i = 0; i < viewParent.getChildCount(); i++) {
+			View ch = viewParent.getChildAt(i);
+			if (ch instanceof Chronometer) {
+        		return ch.getId();
+			}
+		}
+		return 0;
 	}
 }

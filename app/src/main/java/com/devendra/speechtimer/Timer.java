@@ -410,8 +410,6 @@ public class Timer extends Activity implements TextWatcher{
     
 	@Override
 	public void afterTextChanged(Editable arg0) {
-		// TODO Auto-generated method stub
-
 		String s = arg0.toString();
 		int minNum = 0;
 		if (s.length() > 0)

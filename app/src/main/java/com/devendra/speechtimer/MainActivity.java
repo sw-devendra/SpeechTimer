@@ -287,13 +287,16 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		RecyclerView lv = findViewById(R.id.recyclerView);
 		Button b = findViewById(R.id.deleteAll);
 		TextView tv = findViewById(R.id.emptyReportText);
-		if (lv.getAdapter().getItemCount() == 0) {
+		int count = lv.getAdapter().getItemCount();
+		if ( count == 0) {
 			tv.setVisibility(View.VISIBLE);
 			b.setVisibility(View.GONE);
 		}
 		else {
 			tv.setVisibility(View.GONE);
 			b.setVisibility(View.VISIBLE);
+			RecyclerView rv = findViewById(R.id.recyclerView);
+			rv.scrollToPosition(count - 1);
 		}
 	}
 
@@ -314,6 +317,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
     	EditText nameText = findViewById(R.id.editText1);
     	nameText.setText("");
     	initializeReport();
+
     }
     
     @Override

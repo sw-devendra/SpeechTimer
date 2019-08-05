@@ -211,16 +211,17 @@ public class Timer extends Activity implements TextWatcher{
 			{
 				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 				boolean vibrationOn = sharedPreferences.getBoolean("vibration", true);
+				String durationStr = sharedPreferences.getString("vibration_strength", "1000");
 				if (vibrationOn) {
 					Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-				    vibrator.vibrate(VibrationEffect.createOneShot(100,VibrationEffect.DEFAULT_AMPLITUDE));
+				    vibrator.vibrate(VibrationEffect.createOneShot(Integer.valueOf(durationStr),VibrationEffect.DEFAULT_AMPLITUDE));
 				}
 			}
 			
 			@Override
 			public void onChronometerTick(Chronometer chronometer) {
-				EditText minTimeEd = (EditText)findViewById(R.id.minTimeOnTimer);
-				Button maxTimeBut = (Button) findViewById(R.id.maxTimeOnTimer);
+				EditText minTimeEd = findViewById(R.id.minTimeOnTimer);
+				Button maxTimeBut = findViewById(R.id.maxTimeOnTimer);
 				
 				String minString = minTimeEd.getText().toString();
 				int min = 0;

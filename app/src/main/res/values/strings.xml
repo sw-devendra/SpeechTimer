@@ -43,6 +43,7 @@
     <string name="vibrationSetTitle">Enable vibration</string>
     <string name="vibSummaryOn">Vibration on crossing minimum, medium, and maximum time</string>
     <string name="vibSummaryOff">No vibration on crossing minimum, medium, and maximum time</string>
+    <string name="vibStrengthSummary">Used only when vibration is enabled</string>
     <string name="gyrSetTitle">Show G, Y or R in Timer</string>
     <string name="gyrSummaryOn">Show G, Y or R for easy recognition of colors in timer</string>
     <string name="gyrSummaryOff">No G, Y or R in timer</string>

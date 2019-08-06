@@ -77,5 +77,7 @@
     <string name="blackTimerBGSummarry">Normal timer background will be black</string>
     <string name="whiteTimerBGSummarry">Normal  timer background will be white</string>
 
+    <!-- Snag bar -->
+    <string name="entryRemovedNoti">Entry was removed from the report.</string>
     
 </resources>

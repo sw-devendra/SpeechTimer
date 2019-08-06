@@ -45,7 +45,7 @@
 
             <LinearLayout
                 android:id="@+id/preparedSpeech"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                  >
 
@@ -61,7 +61,8 @@
                     android:selectAllOnFocus="true"
                     android:text="5"
                     android:textColor="@color/neutral"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="@dimen/speechBtnText"/>
 
                 <TextView
                     android:id="@+id/toInSpeech"
@@ -82,7 +83,8 @@
                     android:onClick="maxButtonOnClick"
                     android:text="7"
                     android:textColor="@color/neutral"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textSize="@dimen/speechBtnText"/>
 
                 <TextView
                     android:id="@+id/minBeforSpeech"
@@ -95,45 +97,51 @@
 
                 <Button
                     android:id="@+id/speech"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:elevation="4dp"
                     android:onClick="buttonOnClick"
                     android:text="@string/speech"
+
                     android:textAlignment="center"
                     android:textStyle="bold"
-                    android:drawableRight="@android:drawable/ic_media_play"/>
+                    android:textSize="@dimen/speechBtnText"/>
 
             </LinearLayout>
-            <GridLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/preparedSpeech"
-                android:columnCount="2"
-                android:horizontalSpacing="10dp"
+
+                android:orientation="horizontal"
                 android:id="@+id/specialSpeeches">
                 <Button
                     android:id="@+id/table_topic"
                     android:layout_height="wrap_content"
-                    android:drawableRight="@android:drawable/ic_media_play"
-                    android:layout_gravity="fill"
 
+
+                    android:layout_gravity="fill"
                     android:elevation="4dp"
                     android:onClick="buttonOnClick"
                     android:text="@string/table"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:textSize="@dimen/speechBtnText"/>
                 <Button
                     android:id="@+id/evaluation"
                     android:layout_height="wrap_content"
-                    android:drawableRight="@android:drawable/ic_media_play"
                     android:layout_gravity="fill"
-
                     android:elevation="4dp"
                     android:onClick="buttonOnClick"
                     android:text="@string/evaluation"
-                    android:textStyle="bold" />
-            </GridLayout>
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:textSize="@dimen/speechBtnText"
+                    />
+            </LinearLayout>
 
             <GridLayout
                 android:layout_width="match_parent"
@@ -148,14 +156,15 @@
                     android:elevation="4dp"
                     android:padding="0dp">
 
-                    <GridLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="0dp">
 
                         <Chronometer
                             android:id="@+id/wholemeeting"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
                             android:layout_height="wrap_content"
                             android:layout_columnWeight="1"
                             android:layout_gravity="fill"
@@ -175,7 +184,6 @@
                             android:id="@+id/wholeMeetingLog"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
                             android:background="@android:color/transparent"
                             android:elevation="16dp"
                             android:onClick="logSpecialTimer"
@@ -186,7 +194,7 @@
                             android:id="@+id/wholeMeetingStop"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
+
                             android:background="@android:color/transparent"
                             android:elevation="16dp"
                             android:onClick="stopSpecialTimer"
@@ -198,7 +206,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
+
                             android:background="@android:color/transparent"
                             android:elevation="16dp"
                             android:onClick="playPauseSpecialTimer"
@@ -206,7 +214,7 @@
                             app:srcCompat="@drawable/ic_action_play" />
 
 
-                    </GridLayout>
+                    </LinearLayout>
                 </android.support.v7.widget.Toolbar>
 
                 <android.support.v7.widget.Toolbar
@@ -218,16 +226,17 @@
                     android:elevation="4dp"
                     android:padding="0dp">
 
-                    <GridLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="0dp">
 
                         <Chronometer
                             android:id="@+id/quicktimer"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.5"
                             android:layout_height="wrap_content"
-                            android:layout_columnWeight="1"
+
                             android:layout_gravity="fill"
                             android:clickable="true"
                             android:elevation="4dp"
@@ -244,7 +253,7 @@
                             android:id="@+id/quickTimerLog"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
+
                             android:background="@android:color/transparent"
                             android:elevation="16dp"
                             android:onClick="logSpecialTimer"
@@ -255,7 +264,7 @@
                             android:id="@+id/quickTimerStop"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
+
                             android:background="@android:color/transparent"
                             android:elevation="16dp"
                             android:onClick="stopSpecialTimer"
@@ -267,7 +276,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
+
                             android:background="@android:color/transparent"
                             android:elevation="16dp"
                             android:onClick="playPauseSpecialTimer"
@@ -275,7 +284,7 @@
                             app:srcCompat="@drawable/ic_action_play" />
 
 
-                    </GridLayout>
+                    </LinearLayout>
                 </android.support.v7.widget.Toolbar>
             </GridLayout>
 

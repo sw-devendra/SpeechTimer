@@ -44,6 +44,7 @@ import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -667,7 +668,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 				handleCountChange();
 
 				Snackbar snackbar = Snackbar
-						.make(findViewById(R.id.recyclerView), "Item was removed from the list.", Snackbar.LENGTH_LONG);
+						.make(findViewById(R.id.recyclerView), getResources().getString(R.string.entryRemovedNoti), Snackbar.LENGTH_LONG);
 				snackbar.setAction("UNDO", new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
@@ -689,7 +690,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	}
 
 	private int findTargetTimerId(View v) {
-		GridLayout viewParent =  (GridLayout)v.getParent();
+		LinearLayout viewParent =  (LinearLayout)v.getParent();
 		for (int i = 0; i < viewParent.getChildCount(); i++) {
 			View ch = viewParent.getChildAt(i);
 			if (ch instanceof Chronometer) {

@@ -55,7 +55,7 @@ public class Timer extends Activity implements TextWatcher{
 	 * Whether or not the system UI should be auto-hidden after
 	 * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
 	 */
-	private static final boolean AUTO_HIDE = true;
+	private static boolean AUTO_HIDE = true;
 
 	/**
 	 * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
@@ -75,10 +75,11 @@ public class Timer extends Activity implements TextWatcher{
 	 * The flags to pass to {@link SystemUiHider#getInstance}.
 	 */
 	private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
-	public static final int SPEECH_STATE_STARTED=0;
-	public static final int SPEECH_STATE_MIN_TIME_CROSOSED=1;
-	public static final int SPEECH_STATE_MID_TIME_CROSOSED=2;
-	public static final int SPEECH_STATE_MAX_TIME_CROSOSED=3;
+	public static final int SPEECH_STATE_STOPPED=0;
+	public static final int SPEECH_STATE_STARTED=1;
+	public static final int SPEECH_STATE_MIN_TIME_CROSOSED=2;
+	public static final int SPEECH_STATE_MID_TIME_CROSOSED=3;
+	public static final int SPEECH_STATE_MAX_TIME_CROSOSED=4;
 
 	/**
 	 * The instance of the {@link SystemUiHider} for this activity.
@@ -341,6 +342,7 @@ public class Timer extends Activity implements TextWatcher{
 		
 		toggle.toggle();
 		timerView.start();
+		mSpeechState = SPEECH_STATE_STARTED;
 	}
 
     private void setLanguage()
@@ -366,6 +368,7 @@ public class Timer extends Activity implements TextWatcher{
 			tb.setChecked(false);
 			Chronometer ch = (Chronometer) findViewById(R.id.chronometer);
 			ch.stop();
+			mSpeechState = SPEECH_STATE_STOPPED;
 		}
 		
 		super.onBackPressed();
@@ -429,8 +432,12 @@ public class Timer extends Activity implements TextWatcher{
     	    	contentView.setBase(SystemClock.elapsedRealtime());
     	    	mSpeechState = SPEECH_STATE_STARTED;
     	    	contentView.start();
+    	    	delayedHide(AUTO_HIDE_DELAY_MILLIS);
     	    } else {
     	    	contentView.stop();
+				mSpeechState = SPEECH_STATE_STOPPED;
+				mHideHandler.removeCallbacks(mHideRunnable); // Remove hide call back if any
+
     	    	writeReportToFile();
     	    }
     }

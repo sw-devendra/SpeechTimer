@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -97,7 +98,7 @@ public class Timer extends Activity implements TextWatcher{
 		Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
 	    float oldSize = chrono.getTextSize();
 	    // Don't let the object get too small or too large.
-	    mTextSize = Math.max(10.0f, Math.min(oldSize*detector.getScaleFactor(), 500.0f));
+	    mTextSize = Math.max(10.0f, Math.min(oldSize*detector.getScaleFactor(), 800.0f));
 	    chrono.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
 	    return true;
 	}
@@ -116,14 +117,17 @@ public class Timer extends Activity implements TextWatcher{
 		final View controlsView = findViewById(R.id.fullscreen_content_controls);
 		final Chronometer timerView = (Chronometer)findViewById(R.id.chronometer);
 
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		// Setup Initial timer state
 		View timerLayout = findViewById(R.id.timer_layout);
-		timerLayout.setBackgroundColor(Color.WHITE);
+		boolean whiteBG = sharedPreferences.getBoolean("whitetimerbg", false);
+		timerLayout.setBackgroundColor(whiteBG?Color.WHITE:Color.BLACK);
+        timerView.setTextColor(whiteBG?Color.BLACK: Color.WHITE);
 		mSpeechState = SPEECH_STATE_STARTED;
 		
 		mScaleDetector = new ScaleGestureDetector(this, new ScaleListener());
 		
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
 		if(!sharedPreferences.contains("timerTextSize")) {
 			mTextSize = timerView.getTextSize();
 			Editor editor = sharedPreferences.edit();
@@ -207,6 +211,13 @@ public class Timer extends Activity implements TextWatcher{
 		timerView.setOnChronometerTickListener(new OnChronometerTickListener() {
 			 
 			private static final int VIBRATION_DURATION = 1500;
+
+			private void handleStateChange(View v, Chronometer cm, int bgColor) {
+				vibrateIfEnabled();
+				v.setBackgroundColor(bgColor);
+				cm.setTextColor(Color.argb(255,(~Color.red(bgColor))&0xff, (~Color.green(bgColor))&0xff, (~Color.blue(bgColor))&0xff));
+			}
+
 			private void vibrateIfEnabled()
 			{
 				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -233,33 +244,45 @@ public class Timer extends Activity implements TextWatcher{
 				int mid = (min + max)/2;				
 				long timepassed = SystemClock.elapsedRealtime() - chronometer.getBase();
 				View v = findViewById(R.id.timer_layout);
+				Chronometer cm = (Chronometer) findViewById(R.id.chronometer);
+
+				int bgColor = Color.BLACK;
+
+				// Preferred color for normal Timer
+				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+				boolean whiteTimerBG = sharedPreferences.getBoolean("whitetimerbg", false);
+
 				if (timepassed >= max && mSpeechState != SPEECH_STATE_MAX_TIME_CROSOSED) {
-					 v.setBackgroundColor(Color.RED);
+					bgColor = Color.RED;
+					handleStateChange(v,cm,bgColor);
 					 mSpeechState = SPEECH_STATE_MAX_TIME_CROSOSED;
-					 vibrateIfEnabled();
 				}
 				else if (timepassed >= mid && timepassed < max && mSpeechState != SPEECH_STATE_MID_TIME_CROSOSED) {
-					v.setBackgroundColor(Color.rgb(255, 255, 150));
+
+					bgColor = Color.YELLOW;
 					mSpeechState = SPEECH_STATE_MID_TIME_CROSOSED;
-					vibrateIfEnabled();
+					handleStateChange(v,cm,bgColor);
 				}
 				else if (timepassed >= min && timepassed < mid && mSpeechState != SPEECH_STATE_MIN_TIME_CROSOSED) {
-					v.setBackgroundColor(Color.GREEN);
+
+					bgColor = Color.GREEN;
 					mSpeechState = SPEECH_STATE_MIN_TIME_CROSOSED;
-					vibrateIfEnabled();
+					handleStateChange(v,cm,bgColor);
 				}
 				else if (timepassed < min && mSpeechState != SPEECH_STATE_STARTED ){
-				 v.setBackgroundColor(Color.WHITE);
-				 mSpeechState = SPEECH_STATE_STARTED;
+					bgColor = (whiteTimerBG?Color.WHITE:Color.BLACK);
+					handleStateChange(v,cm,bgColor);
+				    mSpeechState = SPEECH_STATE_STARTED;
 				}
+
+
 				
 				// Show/hide Color symbol depending on current setting
-				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 				boolean showcolorsymbol = sharedPreferences.getBoolean("showcolorsymbol", true);
 				
 				TextView tv = (TextView) findViewById(R.id.colorsymbol);
 				
-				Chronometer cm = (Chronometer) findViewById(R.id.chronometer);				
+
 				if (showcolorsymbol && mSpeechState != SPEECH_STATE_STARTED) {
 					String colorSymbol = new String();
 					switch(mSpeechState) {
@@ -274,6 +297,8 @@ public class Timer extends Activity implements TextWatcher{
 							break;
 					};
 					cm.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+
+
 					tv.setVisibility(View.VISIBLE);
 					tv.setText(colorSymbol);
 				} else {
@@ -284,8 +309,9 @@ public class Timer extends Activity implements TextWatcher{
 				// Show/hide time depending on current setting
 				boolean showtime = sharedPreferences.getBoolean("showtime", true);
 				
-				if (showtime)
+				if (showtime) {
 					cm.setVisibility(View.VISIBLE);
+				}
 				else
 					cm.setVisibility(View.INVISIBLE);
 			}
@@ -465,6 +491,7 @@ public class Timer extends Activity implements TextWatcher{
 	        }
 	    	return minTimeInt;
 	    }
+
     private void writeReportToFile()
     {
     	File file = new File(this.getFilesDir(), SpeakerEntry.REPORT_FILE);

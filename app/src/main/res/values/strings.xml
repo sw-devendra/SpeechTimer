@@ -59,6 +59,8 @@
 
 
 
+
+
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
     <string name="min">min</string>
@@ -69,6 +71,11 @@
 
     <!-- Vibration Settings -->
     <string name="pref_vibration_strength">Vibration Strength</string>
+
+    <!-- Timer Background-->
+    <string name="whiteTimerBG">White Timer Background</string>
+    <string name="blackTimerBGSummarry">Normal timer background will be black</string>
+    <string name="whiteTimerBGSummarry">Normal  timer background will be white</string>
 
     
 </resources>

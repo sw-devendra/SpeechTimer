@@ -48,4 +48,9 @@
     <!-- Vibration Settings -->
     <string name="pref_vibration_strength">진동 강도</string>
 
+    <!-- Timer Background-->
+    <string name="whiteTimerBG">흰색 타이머 배경</string>
+    <string name="blackTimerBGSummarry">타이머 배경이 검은 색이됩니다</string>
+    <string name="whiteTimerBGSummarry">타이머 배경은 흰색입니다</string>
+
 </resources>

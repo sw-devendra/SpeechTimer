@@ -637,7 +637,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	            for (Integer t: timerIds) {
 					SpeakerEntry se = new SpeakerEntry();
 					se.name = (log?"Elapsed":"");
-					se.type = findViewById(t).getTag().toString();
+					se.type = timerIdToShortTag(t); //findViewById(t).getTag().toString();
 					SpecialTimerData std = helperMap.get(t);
 					Chronometer contentView = findViewById(std.timerId);
 					se.duration = contentView.getText().toString();
@@ -697,5 +697,14 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 			}
 		}
 		return 0;
+	}
+
+	private String timerIdToShortTag(int timerId) {
+		if (timerId == R.id.wholemeeting) {
+			return "WM";
+		}
+		else {
+			return "QT";
+		}
 	}
 }

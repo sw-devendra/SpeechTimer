@@ -1,9 +1,0 @@
-<resources>
-
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="fadingwidth">1mm</dimen>
-    <dimen name="colortextsize">300dp</dimen>
-
-</resources>

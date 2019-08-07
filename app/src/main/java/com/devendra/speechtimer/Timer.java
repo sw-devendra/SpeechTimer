@@ -213,21 +213,22 @@ public class Timer extends Activity implements TextWatcher{
 			 
 			private static final int VIBRATION_DURATION = 1500;
 
-			private void handleStateChange(View v, Chronometer cm, int bgColor) {
-				vibrateIfEnabled();
+			private void handleStateChange(View v, Chronometer cm, int bgColor, boolean init) {
+				if (!init) // Vibration is not needed on init
+					vibrateIfEnabled();
+
 				v.setBackgroundColor(bgColor);
 				cm.setTextColor(Color.argb(255,(~Color.red(bgColor))&0xff, (~Color.green(bgColor))&0xff, (~Color.blue(bgColor))&0xff));
 			}
 
 			private void vibrateIfEnabled()
 			{
-				SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-				boolean vibrationOn = sharedPreferences.getBoolean("vibration", true);
-				String durationStr = sharedPreferences.getString("vibration_strength", "1000");
-				if (vibrationOn) {
-					Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-				    vibrator.vibrate(VibrationEffect.createOneShot(Integer.valueOf(durationStr),VibrationEffect.DEFAULT_AMPLITUDE));
-				}
+				String durationStr = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("vibration_strength", "1000");
+				if ( "0".equals(durationStr))
+					return;
+
+				Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+				vibrator.vibrate(VibrationEffect.createOneShot(Integer.valueOf(durationStr),VibrationEffect.DEFAULT_AMPLITUDE));
 			}
 			
 			@Override
@@ -255,24 +256,24 @@ public class Timer extends Activity implements TextWatcher{
 
 				if (timepassed >= max && mSpeechState != SPEECH_STATE_MAX_TIME_CROSOSED) {
 					bgColor = Color.RED;
-					handleStateChange(v,cm,bgColor);
+					handleStateChange(v,cm,bgColor, false);
 					 mSpeechState = SPEECH_STATE_MAX_TIME_CROSOSED;
 				}
 				else if (timepassed >= mid && timepassed < max && mSpeechState != SPEECH_STATE_MID_TIME_CROSOSED) {
 
 					bgColor = Color.YELLOW;
 					mSpeechState = SPEECH_STATE_MID_TIME_CROSOSED;
-					handleStateChange(v,cm,bgColor);
+					handleStateChange(v,cm,bgColor, false);
 				}
 				else if (timepassed >= min && timepassed < mid && mSpeechState != SPEECH_STATE_MIN_TIME_CROSOSED) {
 
 					bgColor = Color.GREEN;
 					mSpeechState = SPEECH_STATE_MIN_TIME_CROSOSED;
-					handleStateChange(v,cm,bgColor);
+					handleStateChange(v,cm,bgColor, false);
 				}
 				else if (timepassed < min && mSpeechState != SPEECH_STATE_STARTED ){
 					bgColor = (whiteTimerBG?Color.WHITE:Color.BLACK);
-					handleStateChange(v,cm,bgColor);
+					handleStateChange(v,cm,bgColor, true);
 				    mSpeechState = SPEECH_STATE_STARTED;
 				}
 

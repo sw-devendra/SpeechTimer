@@ -12,7 +12,6 @@
     <CheckBoxPreference android:title="@string/gyrSetTitle" android:defaultValue="true" android:summaryOff="@string/gyrSummaryOff" android:key="showcolorsymbol" android:summaryOn="@string/gyrSummaryOn"/>
     <CheckBoxPreference android:title="@string/timerSetTittle" android:defaultValue="true" android:summaryOff="@string/timerSummaryOff" android:key="showtime" android:summaryOn="@string/timerSummaryOn"/>
     <ListPreference android:entries="@array/languages" android:entryValues="@array/langcodes" android:title="@string/language" android:defaultValue="en" android:key="language"/>
-    <CheckBoxPreference android:title="@string/vibrationSetTitle" android:key="vibration" android:enabled="true" android:summaryOff="@string/vibSummaryOff" android:summaryOn="@string/vibSummaryOn" android:defaultValue="true"/>
     <ListPreference android:entries="@array/vibrationStr" android:entryValues="@array/durations" android:title="@string/pref_vibration_strength" android:defaultValue="1000" android:key="vibration_strength" android:summary="@string/vibStrengthSummary"/>
 
 </PreferenceScreen>

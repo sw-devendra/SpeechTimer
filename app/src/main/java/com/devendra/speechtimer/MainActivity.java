@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		public int logId;
 		public int stopId;
 		public int timerState;
-		public long lastPauseTime;
 		public String elapsedTime;
 	};
 
@@ -156,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		std.playPauseId = R.id.quickTimerPlay;
 		std.stopId = R.id.quickTimerStop;
 		std.timerState = STOPPED;
-		std.lastPauseTime = 0;
 
 		helperMap.put( R.id.quicktimer, std);
 
@@ -166,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		std2.playPauseId = R.id.wholeMeetingPlay;
 		std2.stopId = R.id.wholeMeetingStop;
 		std2.timerState = STOPPED;
-		std2.lastPauseTime = 0;
+
 		helperMap.put(R.id.wholemeeting, std2);
 	}
     
@@ -180,8 +178,9 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 			SpecialTimerData std = entry.getValue();
 			savedInstanceState.putInt(entry.getKey() + "State", std.timerState);
 			Chronometer qt = findViewById(std.timerId);
-			if (std.timerState != STOPPED)
+			if (std.timerState != STOPPED) {
 				savedInstanceState.putString(entry.getKey() + "Elapsed", qt.getText().toString());
+			}
 		}
     }
     
@@ -194,8 +193,10 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		for (Map.Entry<Integer, SpecialTimerData> entry : helperMap.entrySet()) {
 			SpecialTimerData std = entry.getValue();
 			std.timerState = savedInstanceState.getInt(entry.getKey() + "State");
-			if (std.timerState != STOPPED)
+
+			if (std.timerState != STOPPED) {
 				std.elapsedTime = savedInstanceState.getString(entry.getKey() + "Elapsed");
+			}
 			helperMap.put(entry.getKey(),std);
 		}
     }
@@ -215,7 +216,6 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 	
     private void SetupActivity()
     {
-    	
 		PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
 		registerLangChangeListner();
 		updateActivityLanguage();
@@ -225,16 +225,6 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
         EditText t1 = findViewById(R.id.editText2);
         t1.setGravity(Gravity.CENTER);
         t1.addTextChangedListener(this);
-        /*
-     // Empty report text
-        TextView emptyReportText = new TextView(this);
-        emptyReportText.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-        LayoutParams.WRAP_CONTENT));
-        emptyReportText.setText(getResources().getString(R.string.NoRecentSpeakers));
-        emptyReportText.setTextSize(30);
-        
-        RelativeLayout rl =findViewById(R.id.reportLayout);
-        rl.addView(emptyReportText); */
     }
     
     private void registerLangChangeListner()
@@ -378,7 +368,14 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 			String timeFields[] = std.elapsedTime.split(":");
 			timer.setBase(SystemClock.elapsedRealtime()
 					- Integer.parseInt(timeFields[0])*60000 - Integer.parseInt(timeFields[1])*1000);
-			timer.start();
+			ImageButton playPause = findViewById(std.playPauseId);
+			if (std.timerState == RUNNING) {
+				timer.start();
+				playPause.setImageResource(R.drawable.ic_action_pause);
+			}
+			else {
+				playPause.setImageResource(R.drawable.ic_action_play);
+			}
 		}
 		helperMap.put(timerID, std);
 
@@ -414,7 +411,6 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 			findViewById(std.logId).setVisibility(View.VISIBLE);
 			findViewById(std.stopId).setVisibility(View.VISIBLE);
 			std.timerState = RUNNING;
-			std.lastPauseTime = 0;
 		}
 		else {
 			playPauseSpecialTimer(v);
@@ -453,7 +449,7 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		if (std.timerState == RUNNING) {
 			timer.stop();
 			std.timerState = PAUSED;
-			std.lastPauseTime = SystemClock.elapsedRealtime();
+			std.elapsedTime = timer.getText().toString();
 			playPause.setImageResource(R.drawable.ic_action_play);
 			playPause.setVisibility(View.VISIBLE);
 			findViewById(std.logId).setVisibility(View.VISIBLE);
@@ -461,10 +457,12 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		}
 		else if (std.timerState == PAUSED) {
 
-			timer.start();
+
 			std.timerState = RUNNING;
-			long intervalOnPause = (SystemClock.elapsedRealtime() - std.lastPauseTime);
-			timer.setBase( timer.getBase() + intervalOnPause );
+			String timeFields[] = std.elapsedTime.split(":");
+			timer.setBase(SystemClock.elapsedRealtime()
+					- Integer.parseInt(timeFields[0])*60000 - Integer.parseInt(timeFields[1])*1000);
+			timer.start();
 
 			playPause.setImageResource(R.drawable.ic_action_pause);
 			playPause.setVisibility(View.VISIBLE);

@@ -9,6 +9,7 @@
     -->
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
     <CheckBoxPreference android:title="@string/whiteTimerBG" android:defaultValue="false" android:summaryOff="@string/blackTimerBGSummarry" android:key="whitetimerbg" android:summaryOn="@string/whiteTimerBGSummarry"/>
+    <CheckBoxPreference android:title="@string/onlyLandscape" android:defaultValue="false" android:summaryOff="@string/onlyLandscapeOff" android:key="onlylandscape" android:summaryOn="@string/onlyLandscapeOn"/>
     <CheckBoxPreference android:title="@string/gyrSetTitle" android:defaultValue="true" android:summaryOff="@string/gyrSummaryOff" android:key="showcolorsymbol" android:summaryOn="@string/gyrSummaryOn"/>
     <CheckBoxPreference android:title="@string/timerSetTittle" android:defaultValue="true" android:summaryOff="@string/timerSummaryOff" android:key="showtime" android:summaryOn="@string/timerSummaryOn"/>
     <ListPreference android:entries="@array/languages" android:entryValues="@array/langcodes" android:title="@string/language" android:defaultValue="en" android:key="language"/>

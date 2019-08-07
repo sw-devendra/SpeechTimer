@@ -79,5 +79,9 @@
 
     <!-- Snag bar -->
     <string name="entryRemovedNoti">Entry was removed from the report.</string>
-    
+
+    <!--- only landscape setting -->
+    <string name="onlyLandscape">Run this app only in landscape mode</string>
+    <string name="onlyLandscapeOff">App will change orientation with device orientation</string>
+    <string name="onlyLandscapeOn">App will always run in landscape mode</string>
 </resources>

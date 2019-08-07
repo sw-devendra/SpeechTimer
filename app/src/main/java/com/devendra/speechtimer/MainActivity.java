@@ -13,6 +13,7 @@ import com.devendra.speechtimer.util.RecyclerViewAdapter;
 import com.devendra.speechtimer.util.SpeakerEntry;
 import com.devendra.speechtimer.util.SwipeToDeleteCallback;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -130,6 +131,11 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		// created, to briefly hint to the user that UI controls
 		// are available.
         // Set text of quick timer
+
+		// Fixed to landscape?
+		boolean onlyLandscape = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("onlylandscape", false);
+		if (onlyLandscape)
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
 		Toolbar myToolbar = findViewById(R.id.toolbar);
 		myToolbar.setTitle("SpeechTimer");

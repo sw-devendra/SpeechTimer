@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		public int logId;
 		public int stopId;
 		public int timerState;
+		public long timeAtStopping; // Used specially for restoring running special timer state after
+		                            // this activity is launched back after timer activity is stopped
 		public String elapsedTime;
 	};
 
@@ -186,6 +188,9 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 			Chronometer qt = findViewById(std.timerId);
 			if (std.timerState != STOPPED) {
 				savedInstanceState.putString(entry.getKey() + "Elapsed", qt.getText().toString());
+				if (std.timerState == RUNNING) {
+					savedInstanceState.putLong(entry.getKey() + "TimeAtStopping", SystemClock.elapsedRealtime());
+				}
 			}
 		}
     }
@@ -202,6 +207,9 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 
 			if (std.timerState != STOPPED) {
 				std.elapsedTime = savedInstanceState.getString(entry.getKey() + "Elapsed");
+				if (std.timerState == RUNNING) {
+					std.timeAtStopping = savedInstanceState.getLong(entry.getKey() + "TimeAtStopping");
+				}
 			}
 			helperMap.put(entry.getKey(),std);
 		}
@@ -372,10 +380,11 @@ public class MainActivity extends AppCompatActivity implements TextWatcher {
 		}
 		else {
 			String timeFields[] = std.elapsedTime.split(":");
-			timer.setBase(SystemClock.elapsedRealtime()
-					- Integer.parseInt(timeFields[0])*60000 - Integer.parseInt(timeFields[1])*1000);
+			timer.setBase(timer.getBase() - SystemClock.elapsedRealtime() + std.timeAtStopping);
 			ImageButton playPause = findViewById(std.playPauseId);
 			if (std.timerState == RUNNING) {
+				timer.setBase(SystemClock.elapsedRealtime()
+						- Integer.parseInt(timeFields[0])*60000 - Integer.parseInt(timeFields[1])*1000);
 				timer.start();
 				playPause.setImageResource(R.drawable.ic_action_pause);
 			}

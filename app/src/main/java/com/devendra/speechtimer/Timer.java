@@ -393,7 +393,7 @@ public class Timer extends Activity implements TextWatcher{
 		boolean onlyLandscape = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("onlylandscape", false);
 		if (onlyLandscape)
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		
+
 		// Trigger the initial hide() shortly after the activity has been
 		// created, to briefly hint to the user that UI controls
 		// are available.

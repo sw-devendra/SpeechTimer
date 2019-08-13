@@ -9,8 +9,6 @@
     <string name="title_activity_timer">타이머</string>
     <string name="restart">다시 시작</string>
     <string name="stop">중지</string>
-    <string name="title_activity_report">타이머 보고서</string>
-    <string name="report">보고서</string>
     <string name="next_presenter">다음 발표자 누구입니까?</string>
     <string name="speech_max_time">최대 시간</string>
     <string name="QuickTimer">퀵 타이머</string>
@@ -33,6 +31,11 @@
     <string name="clearReportDlgTitle">전체 기록삭제?</string>
     
     <string name="title_activity_settings">설정</string>
+
+    <string name="speakerName">다음 연설자는 누구입니까?</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 
     <!-- Strings related to Settings -->
 

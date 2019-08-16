@@ -389,10 +389,15 @@ public class Timer extends Activity implements TextWatcher{
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		// Fixed to landscape?
-		boolean onlyLandscape = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("onlylandscape", false);
+		boolean onlyLandscape = sharedPreferences.getBoolean("onlylandscape", false);
 		if (onlyLandscape)
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+		boolean whiteTimerBG = sharedPreferences.getBoolean("whitetimerbg", false);
+		EditText nameText= findViewById(R.id.nameOnTimer);
+		nameText.setTextColor(whiteTimerBG?Color.BLACK:Color.WHITE);
 
 		// Trigger the initial hide() shortly after the activity has been
 		// created, to briefly hint to the user that UI controls

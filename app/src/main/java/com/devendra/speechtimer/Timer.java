@@ -124,7 +124,12 @@ public class Timer extends Activity implements TextWatcher{
 		View timerLayout = findViewById(R.id.timer_layout);
 		boolean whiteBG = sharedPreferences.getBoolean("whitetimerbg", false);
 		timerLayout.setBackgroundColor(whiteBG?Color.WHITE:Color.BLACK);
-        timerView.setTextColor(whiteBG?Color.BLACK: Color.WHITE);
+		boolean showtime = sharedPreferences.getBoolean("showtime", true);
+		if (showtime)
+        	timerView.setTextColor(whiteBG?Color.BLACK: Color.WHITE);
+		else
+			timerView.setTextColor(whiteBG?Color.WHITE:Color.BLACK);
+
 		mSpeechState = SPEECH_STATE_STARTED;
 		
 		mScaleDetector = new ScaleGestureDetector(this, new ScaleListener());
@@ -218,8 +223,12 @@ public class Timer extends Activity implements TextWatcher{
 				if (!init) // Vibration is not needed on init
 					vibrateIfEnabled();
 
+				boolean showtime = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("showtime", true);
 				v.setBackgroundColor(bgColor);
-				cm.setTextColor(Color.argb(255,(~Color.red(bgColor))&0xff, (~Color.green(bgColor))&0xff, (~Color.blue(bgColor))&0xff));
+				if (showtime)
+					cm.setTextColor(Color.argb(255,(~Color.red(bgColor))&0xff, (~Color.green(bgColor))&0xff, (~Color.blue(bgColor))&0xff));
+				else
+					cm.setTextColor(bgColor);
 			}
 
 			private void vibrateIfEnabled()
@@ -308,15 +317,6 @@ public class Timer extends Activity implements TextWatcher{
 					 cm.setGravity(Gravity.CENTER);
 					 tv.setVisibility(View.INVISIBLE);					
 				}
-				
-				// Show/hide time depending on current setting
-				boolean showtime = sharedPreferences.getBoolean("showtime", true);
-				
-				if (showtime) {
-					cm.setVisibility(View.VISIBLE);
-				}
-				else
-					cm.setVisibility(View.INVISIBLE);
 			}
  
 		});

@@ -1,13 +1,21 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
+    signingConfigs {
+        debug {
+            storeFile file('C:\\sources\\android_keys\\keystore')
+            storePassword 'luminous22'
+            keyAlias = 'devendra'
+            keyPassword 'luminous22'
+        }
+    }
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.devendra.speechtimer"
         minSdkVersion 26
-        targetSdkVersion 28
-        versionCode 11
-        versionName "1.9"
+        targetSdkVersion 29
+        versionCode 12
+        versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

@@ -34,6 +34,7 @@
             android:layout_centerVertical="true"
             android:text="Item 1"
             android:textSize="20dp"
+            android:textColor="#000000"
             android:textAppearance="@style/TextAppearance.Compat.Notification.Title" />
     </RelativeLayout>
 
